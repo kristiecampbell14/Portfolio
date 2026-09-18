@@ -137,47 +137,58 @@ window.SITE = {
      ------------------------------------------------------------------- */
   timeline: [
     {
-      year: "2011",
-      title: "Job Title",                            // TODO
-      company: "Company Name",
-      dates: "2011 – 2014",
+      year: "2013",
+      title: "Web Designer I",                            // TODO
+      company: "GoDaddy",
+      dates: "2013 – 2016",
       points: [
-        "Key accomplishment or responsibility.",
-        "Key accomplishment or responsibility.",
-        "Key accomplishment or responsibility."
+        "Produced websites for small business customers using Website Builder, Shopping cart, and WordPress",
+        "Constantly evaluated internal team processes in an ever-changing environment and proposed new solutions to increase productivity",
+        "Used HTML/CSS and Adobe Creative Suite to create custom experiences for customers who did not fit “in the box” of a template design"
       ]
     },
     {
-      year: "2014",
-      title: "UX Designer",                          // TODO
-      company: "Company Name",
-      dates: "2014 – 2017",
+      year: "2016",
+      title: "Jr. UX/UI Designer",                          // TODO
+      company: "University of Phoenix",
+      dates: "2016 – 2017",
       points: [
-        "Key accomplishment or responsibility.",
-        "Key accomplishment or responsibility.",
-        "Key accomplishment or responsibility."
+        "Ideated with cross functional teams to create business and product solutions that are meaningful to users",
+        "Created low/high-fidelity wireframes and working prototypes to test in a lab or virtual lab environment",
+        "Defined user interactions in depth to product owners and developers for seamless hand-off"
       ]
     },
     {
       year: "2017",
-      title: "Senior UX Designer",
-      company: "Company Name",
-      dates: "2017 – 2020",
-      points: ["Key accomplishment.", "Key accomplishment.", "Key accomplishment."]
+      title: "Lead UX/UI Designer",
+      company: "OpenTech Alliance",
+      dates: "2017 – 2021",
+      points: [
+        "Led UX design and research efforts across the company on a multitude of projects including self-service kiosks, access control systems, and e-commerce websites",
+        "Redesigned StorageTreasures.com to be a mobile-first experience while simultaneously rebranding for better ADA compliance and modernization and differentiation",
+        "Redesigned and improved usability on a new version of customizable self-storage kiosks from start to finish, as well as a third new version exclusively for Public Storage"
+      ]
     },
     {
-      year: "2020",
-      title: "Lead Product Designer",
-      company: "Company Name",
-      dates: "2020 – 2023",
-      points: ["Key accomplishment.", "Key accomplishment.", "Key accomplishment."]
+      year: "2021",
+      title: "Sr. UX/UI Designer",
+      company: "University of Phoenix",
+      dates: "2021 – 2024",
+      points: [
+        "Served as the design lead in a product trio, collaborating with the product manager and tech lead for career products that served 24,000+ students and alumni per month",
+        "Owned the end-to-end user experience strategy for a suite of student facing products, including 0-1 products such as our Job Explorer, Career Profile, and AI Resume Generator tools",
+        "Led continuous discovery, research, design, and data efforts with real users via interviews, surveys, A/B tests, and integration with tools such as FullStory to gain a full picture with quantitative and qualitative data points"
+      ]
     },
     {
-      year: "2023",
-      title: "Design Manager",
-      company: "Company Name",
-      dates: "2023 – Present",
-      points: ["Key accomplishment.", "Key accomplishment.", "Key accomplishment."]
+      year: "2024",
+      title: "Sr. UX Manager (player-coach)",
+      company: "University of Phoenix",
+      dates: "2024 – 2026",
+      points: [
+        "Led a team of 6 product centric senior UX designers and content writers to ensure a cohesive user experience in the B2B/careers space ",
+        "Championed an agentic support agent, Super Phoebe, that spanned across multiple customer lifecycles and integrated with internal support for a seamless user experience",
+        "Led and monitored an ever expanding design system utilizing MUI as the base, while integrating heavily with the collaboration and direction of our ADA team across a large group of UX designers"]
     }
   ],
 
