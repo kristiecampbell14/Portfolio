@@ -62,13 +62,17 @@
 
   window.Gate = {
     isUnlocked() {
-      return store(() => localStorage.getItem(KEY)) === "1" || window.__kcUnlocked === true;
+      // Stored value is the hash that unlocked it, not a bare flag, so rotating
+      // workPasswordHash invalidates every previously-unlocked visitor automatically
+      // (their stored hash no longer matches the current one) with no manual step.
+      const stored = store(() => localStorage.getItem(KEY));
+      return (!!stored && stored === window.SITE.workPasswordHash) || window.__kcUnlocked === true;
     },
     async tryUnlock(password) {
       const hash = await window.sha256Hex(password.trim());
       if (hash === window.SITE.workPasswordHash) {
         window.__kcUnlocked = true;
-        store(() => localStorage.setItem(KEY, "1"));
+        store(() => localStorage.setItem(KEY, hash));
         return true;
       }
       return false;
