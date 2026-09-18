@@ -60,6 +60,23 @@
     try { return fn(); } catch (e) { return null; }
   }
 
+  // Wires up any "show password" eyeball button(s) within root. Safe to call
+  // more than once on the same DOM (e.g. after re-rendering the story gate).
+  window.wirePasswordToggle = function (root) {
+    (root || document).querySelectorAll("[data-pw-toggle]").forEach((btn) => {
+      if (btn.dataset.wired) return;
+      btn.dataset.wired = "1";
+      const input = btn.previousElementSibling;
+      btn.addEventListener("click", () => {
+        const show = input.type === "password";
+        input.type = show ? "text" : "password";
+        btn.setAttribute("aria-pressed", String(show));
+        btn.setAttribute("aria-label", show ? "Hide password" : "Show password");
+        input.focus({ preventScroll: true });
+      });
+    });
+  };
+
   window.Gate = {
     isUnlocked() {
       // Stored value is the hash that unlocked it, not a bare flag, so rotating
@@ -82,4 +99,6 @@
       store(() => localStorage.removeItem(KEY));
     }
   };
+
+  window.wirePasswordToggle(document);
 })();

@@ -223,13 +223,23 @@
           <p>Enter the password to continue.</p>
           <div class="gate__row">
             <label class="sr-only" for="pw">Password</label>
-            <input id="pw" type="password" autocomplete="current-password" placeholder="Password" required autofocus />
+            <div class="gate__pw-wrap">
+              <input id="pw" type="password" autocomplete="current-password" placeholder="Password" required autofocus />
+              <button type="button" class="gate__pw-toggle" data-pw-toggle aria-label="Show password" aria-pressed="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path class="eye-shape" d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" />
+                  <circle class="eye-shape" cx="12" cy="12" r="3" />
+                  <line class="eye-slash" x1="3" y1="3" x2="21" y2="21" />
+                </svg>
+              </button>
+            </div>
             <button class="btn btn--primary" type="submit">Unlock</button>
           </div>
           <p class="gate__error" role="alert"></p>
         </form>
       </section>`;
     const form = root.querySelector("form");
+    window.wirePasswordToggle(form);
     form.addEventListener("submit", async (ev) => {
       ev.preventDefault();
       const input = form.querySelector("input");
