@@ -937,6 +937,10 @@ body.menu-open {
   padding: 12px max(var(--gutter), calc((100% - var(--max)) / 2 + var(--gutter))) 24px;
   scroll-padding-inline: max(var(--gutter), calc((100% - var(--max)) / 2 + var(--gutter)));
   cursor: grab;
+  /* explicit: this element's own scroll axis is horizontal, so tell the browser
+     not to hesitate handing off a touch drag to it (native overflow-x already
+     makes it swipable without this; it just removes first-touch gesture lag) */
+  touch-action: pan-x;
 }
 
 .carousel__track::-webkit-scrollbar {
@@ -1612,6 +1616,9 @@ body.menu-open {
   position: relative;
   margin-top: 36px;
   display: grid;
+  /* touch-dragged horizontally by js/main.js; this only declares that intent so
+     the browser still hands vertical page scrolling through untouched */
+  touch-action: pan-y;
 }
 
 .quote {

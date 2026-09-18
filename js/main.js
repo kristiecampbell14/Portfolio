@@ -136,8 +136,12 @@
   }
   function updateCarousel() {
     if (!cards.length) return;
-    const i = currentIndex();
     const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
+    // At true scroll-end, the last card's flush offsetLeft is often unreachable
+    // (its width + trailing gutter is usually less than the viewport), so the
+    // nearest-match search in currentIndex() would otherwise land one short.
+    // Force the last dot once we've actually hit the end.
+    const i = atEnd ? cards.length - 1 : currentIndex();
     [...dotsEl.children].forEach((b, j) => b.setAttribute("aria-current", String(j === i)));
     prevBtn.disabled = track.scrollLeft <= 4;
     nextBtn.disabled = atEnd;
@@ -376,5 +380,40 @@
   pauseZone.addEventListener("touchcancel", () => setPaused(false), { passive: true });
   pauseZone.addEventListener("focusin", () => setPaused(true));
   pauseZone.addEventListener("focusout", (ev) => { if (!pauseZone.contains(ev.relatedTarget)) setPaused(false); });
+
+  // Touch swipe: drag the active quote horizontally; release past SWIPE_MIN
+  // advances/reverses it, otherwise it springs back. Touch only — the pauseZone
+  // listeners above already own hover/focus pausing for mouse and keyboard, and
+  // the work carousel a few sections up is the desktop drag equivalent.
+  let swipe = null;
+  const SWIPE_MIN = 40;
+  quotesEl.addEventListener("pointerdown", (ev) => {
+    if (ev.pointerType !== "touch" || recs.length < 2) return;
+    swipe = { x: ev.clientX, el: quoteEls[qi] };
+    swipe.el.style.transition = "none";
+    try { quotesEl.setPointerCapture(ev.pointerId); } catch (err) { /* touch is implicitly captured anyway */ }
+    setPaused(true);
+  });
+  quotesEl.addEventListener("pointermove", (ev) => {
+    if (!swipe || ev.pointerType !== "touch") return;
+    swipe.el.style.transform = `translateX(${ev.clientX - swipe.x}px)`;
+  });
+  quotesEl.addEventListener("pointerup", (ev) => {
+    if (!swipe || ev.pointerType !== "touch") return;
+    const dx = ev.clientX - swipe.x;
+    swipe.el.style.transition = "";
+    swipe.el.style.transform = "";
+    swipe = null;
+    if (Math.abs(dx) > SWIPE_MIN) showQuote(qi + (dx < 0 ? 1 : -1));
+    setPaused(false);
+  });
+  quotesEl.addEventListener("pointercancel", () => {
+    if (!swipe) return;
+    swipe.el.style.transition = "";
+    swipe.el.style.transform = "";
+    swipe = null;
+    setPaused(false);
+  });
+
   if (recs.length) showQuote(0);
 })();
