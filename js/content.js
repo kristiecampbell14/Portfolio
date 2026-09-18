@@ -45,12 +45,12 @@ window.SITE = {
   /* -------------------------------------------------------------------
      WORK PASSWORD
      Only a SHA-256 hash of the password is stored, not the password itself.
-     Default password: structuredplay
+     Current password: 6026906250
      To change it, open the site, run this in the browser console:
        await sha256Hex("your new password")
      and paste the result below.
      ------------------------------------------------------------------- */
-  workPasswordHash: "68bf526ac70f130a29aad0a58f641a81111ceeeb007e5fb7c5a8d7e45474b3d7",
+  workPasswordHash: "c250fadffe78d0615e8f4bdbf03986f490581f6efd1ed05b5b0c8e5fb0164217",
 
   /* -------------------------------------------------------------------
      PRODUCT STORIES
