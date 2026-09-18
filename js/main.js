@@ -45,7 +45,10 @@
     });
   }
   const requestIntro = () => { if (!ticking) { ticking = true; requestAnimationFrame(renderIntro); } };
-  window.addEventListener("scroll", requestIntro, { passive: true });
+  // shared across the page: lets other code (e.g. the quotes carousel) tell a real
+  // hover apart from a browser-synthesized one fired while content scrolls under a static cursor
+  window.__lastScrollAt = 0;
+  window.addEventListener("scroll", () => { window.__lastScrollAt = performance.now(); requestIntro(); }, { passive: true });
   window.addEventListener("resize", requestIntro);
   if (!reduced) {
     window.addEventListener("pointermove", (ev) => {
@@ -106,8 +109,8 @@
 
   let cards = [];
   function buildCarousel() {
-    track.innerHTML = S.projects.map((p) => `
-      <a class="card" href="project.html?id=${encodeURIComponent(p.slug)}">
+    track.innerHTML = S.stories.map((p) => `
+      <a class="card" href="story.html?id=${encodeURIComponent(p.slug)}">
         ${window.browserMock(p, p.cover)}
         <div class="card__meta">
           <div><h3>${e(p.title)}</h3><p>${e(p.role)} · ${e(p.year)}</p></div>
@@ -115,7 +118,7 @@
         </div>
       </a>`).join("");
     cards = [...track.querySelectorAll(".card")];
-    dotsEl.innerHTML = cards.map((_, i) => `<button aria-label="Go to project ${i + 1}"></button>`).join("");
+    dotsEl.innerHTML = cards.map((_, i) => `<button aria-label="Go to story ${i + 1}"></button>`).join("");
     [...dotsEl.children].forEach((b, i) => b.addEventListener("click", () => goTo(i)));
     updateCarousel();
   }
@@ -335,16 +338,43 @@
     clearTimeout(qTimer);
     if (!reduced && !paused && recs.length > 1) qTimer = setTimeout(() => showQuote(qi + 1), QUOTE_MS);
   }
-  const section = quotesEl.closest("section");
+  // bind to the inner container, not the whole padded <section> — keeps the section's
+  // large top/bottom padding out of the hoverable area (see setPaused notes below)
+  const pauseZone = quotesEl.closest(".container");
+  let pauseBackstop = 0;
   const setPaused = (v) => {
     paused = v;
     quotesEl.classList.toggle("is-paused", v);
-    if (v) clearTimeout(qTimer);
-    else showQuote(qi);
+    clearTimeout(pauseBackstop);
+    if (v) {
+      clearTimeout(qTimer);
+      // self-healing backstop: if some edge case never clears the pause (a missed
+      // event, an unusual browser), don't let the carousel stay dead for the rest of the visit
+      pauseBackstop = setTimeout(() => setPaused(false), 20000);
+    } else {
+      showQuote(qi);
+    }
   };
-  section.addEventListener("pointerenter", () => setPaused(true));
-  section.addEventListener("pointerleave", () => setPaused(false));
-  section.addEventListener("focusin", () => setPaused(true));
-  section.addEventListener("focusout", (ev) => { if (!section.contains(ev.relatedTarget)) setPaused(false); });
+  // Mouse/pen only — scrolling a page can move content under a stationary cursor, which
+  // Chromium-based browsers report as a synthetic pointerenter. Ignore anything that fires
+  // right after a scroll, since a genuine hover won't coincide with one.
+  pauseZone.addEventListener("pointerenter", (ev) => {
+    if (ev.pointerType === "touch") return;
+    if (performance.now() - (window.__lastScrollAt || 0) < 250) return;
+    setPaused(true);
+  });
+  pauseZone.addEventListener("pointerleave", (ev) => {
+    if (ev.pointerType === "touch") return;
+    setPaused(false);
+  });
+  // Touch has no real "hover" — mobile browsers emulate pointerenter/pointerleave around the
+  // touch lifecycle, but a scroll starting on this section reliably fires pointercancel instead
+  // of a clean pointerup/pointerleave pair, which permanently wedges the pause. Handle touch
+  // directly instead: touchend and touchcancel together are guaranteed to follow every touchstart.
+  pauseZone.addEventListener("touchstart", () => setPaused(true), { passive: true });
+  pauseZone.addEventListener("touchend", () => setPaused(false), { passive: true });
+  pauseZone.addEventListener("touchcancel", () => setPaused(false), { passive: true });
+  pauseZone.addEventListener("focusin", () => setPaused(true));
+  pauseZone.addEventListener("focusout", (ev) => { if (!pauseZone.contains(ev.relatedTarget)) setPaused(false); });
   if (recs.length) showQuote(0);
 })();

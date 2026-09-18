@@ -2,13 +2,31 @@
    SITE CONTENT
    ---------------------------------------------------------------------
    This is the only file you need to edit to fill out the site.
-   Anything marked TODO is placeholder copy.
+
+   PRODUCT STORIES
+   Each story renders a card in the Work carousel and its own page at
+   story.html?id=<slug>. A story is a list of `blocks`; each block has a
+   `type` that decides its layout. See js/story.js for the renderer.
+
+   Block types:
+     figure     one image + caption        width: full | wide | narrow
+     split      copy beside an artifact    ratio: 40-60 | 50-50 | 60-40, flip
+     statement  a large pull statement plus supporting copy
+     timeline   horizontal evolution strip of short nodes
+     steps      a numbered progression (observed → tested → built → measured)
+     metrics    a strip of numbers with labels
+     annotated  one artifact plus short text callouts instead of fine print
+     gallery    2-3 small artifacts side by side
+     cards      2-3 text cards for decisions that weren't new screens
+     impact     full-width forest band, huge numbers
+     closing    narrow reading column that ends on one large line
+     prose      a short centered paragraph to set up what follows
    ===================================================================== */
 
 window.SITE = {
   name: "Kristie Campbell",
-  email: "kristiecampbell14@gmail.com.com",                       // TODO
-  linkedin: "https://www.linkedin.com/in/kristiecampbelldesign", // TODO
+  email: "kristiecampbell14@gmail.com",
+  linkedin: "https://www.linkedin.com/in/kristiecampbelldesign",
 
   /* -------------------------------------------------------------------
      CONTACT
@@ -18,8 +36,8 @@ window.SITE = {
   contact: {
     heading: "What's next?",
     body:
-      "That's the story so far. If you're building something that needs clarity, craft, and a little rule-breaking, I'd love to hear about it.", // TODO
-    status: "Open to design leadership roles", // small availability line; set to "" to hide
+      "That's the story so far. If you're building something that needs clarity, craft, and a lot of curiousity, I'd love to hear about it.",
+    status: "Open to design leadership roles",
     emailLabel: "Say hello",
     linkedinLabel: "Connect on LinkedIn"
   },
@@ -35,100 +53,594 @@ window.SITE = {
   workPasswordHash: "68bf526ac70f130a29aad0a58f641a81111ceeeb007e5fb7c5a8d7e45474b3d7",
 
   /* -------------------------------------------------------------------
-     PROJECTS
-     Each project shows as a card in the Work carousel and gets its own
-     detail page at project.html?id=<slug>.
-     Put images in assets/work/ and reference them by path.
-     Leave `cover` empty ("") to show a branded placeholder.
+     PRODUCT STORIES
      ------------------------------------------------------------------- */
-  projects: [
+  stories: [
+    /* =================================================================
+       JOB EXPLORER
+       ================================================================= */
     {
-      slug: "project-one",
-      title: "Job Explorer",                     // TODO
-      role: "Design Lead",                           // TODO
-      year: "2021-2026",
-      tagline: "As a student/alum I need to know what jobs are available that align to my program, skills, and interests",
-      cover: "assets/work/job-explorer-cover.png",                                     // e.g. "assets/work/project-one-cover.jpg"
-      url: "careers.phoenix.edu/jobs",                    // shown in the browser mockup bar
-      accent: "forest",                              // forest | vibrant | mint | charcoal
-      meta: {
-        Role: "Design Lead",
-        Team: "5 engineers, 1 PM",
-        Tools: "UXPin, Figma, FullStory, Jira"
-      },
-      overview:
-        "A short paragraph that sets the scene: who the users were, what was broken, and why it mattered to the business.",
-      sections: [
-        {
-          heading: "The challenge",
-          body: "Describe the problem space. What constraints did you work within? What did success look like?",
-          image: ""
-        },
-        {
-          heading: "Process",
-          body: "Walk through research, exploration and key decisions. Show the thinking, not just the output.",
-          image: ""
-        },
-        {
-          heading: "The solution",
-          body: "Show the final design and explain why it works.",
-          image: ""
-        }
+      slug: "job-explorer",
+      title: "Job Explorer",
+      eyebrow: "0→1 product · 2021–2026",
+      headline: "Rethinking job search for people who don't know what to search for.",
+      intro:
+        "I led Job Explorer from its first release through five years of continuous evolution, creating a personalized, searchless way for working adults to discover relevant opportunities based on their program, skills, preferences, and career goals.",
+
+      /* card in the Work carousel */
+      role: "Lead product designer",
+      year: "2021–2026",
+      tagline: "A job feed with no search bar, for people who don't know what to type.",
+      cover: "assets/stories/job-explorer/cover.png",
+      accent: "forest",
+
+      facts: [
+        { label: "Role", value: "Lead / sole product designer" },
+        { label: "Team", value: "Product trio: PM + tech lead + engineering" },
+        { label: "Responsibilities", value: "Discovery, research, experimentation, UX/UI" },
+        { label: "Impact", value: ["10K+ monthly unique users", "6% → 25% Apply Now conversion"] }
       ],
-      outcomes: [
-        { value: "+32%", label: "Task completion" },
-        { value: "−40%", label: "Support tickets" },
-        { value: "4.6★", label: "User rating" }
+
+      next: {
+        slug: "career-profile",
+        bridge:
+          "The personalization behind Job Explorer depended on understanding the person behind the search."
+      },
+
+      blocks: [
+        {
+          type: "figure",
+          width: "full",
+          image: "assets/stories/job-explorer/cover.png", w: 1920, h: 1080,
+          alt:
+            "The mature Job Explorer page: Career Plan, remote, city and experience-level filters above a column of job cards showing skill-match counts and save hearts, beside a full job description with Apply now and Generate resumé actions.",
+          caption:
+            "The mature Job Explorer experience: personalized recommendations, user-controlled filters, saved jobs, skills matching and Career Plan alignment—without keyword search."
+        },
+
+        {
+          type: "split",
+          ratio: "40-60",
+          heading: "The problem wasn't search. It was knowing what to search for.",
+          body:
+            "Before Job Explorer, students were sent to a third-party job board that was buried in the experience and offered little personalization.\n\nUser interviews revealed something more fundamental: many people didn't know what job title to type into a search field. They searched broad concepts like “remote” or “entry level” because they knew the conditions they wanted, but not necessarily the career they were looking for.\n\nThat changed our question from “How do we improve job search?” to “How do we help someone discover relevant opportunities without requiring them to know what to search for?”",
+          image: "assets/stories/job-explorer/initial-launch.png", w: 998, h: 1044,
+          alt:
+            "The first Job Explorer release: a single remote-jobs toggle, job cards listing possible skills for each job, and a job description with an Apply now button.",
+          caption: "The first release matched jobs to a student's program and self-identified skills."
+        },
+
+        {
+          type: "statement",
+          heading: "I made a deliberate bet on searchless discovery.",
+          quote:
+            "A search bar doesn't improve the outcome when the user doesn't know what to search for.",
+          body:
+            "The absence of search was controversial. UX leadership repeatedly questioned whether a job feed could work without it. I defended the model because adding keyword search would have shifted the burden back to the user instead of solving the problem we had observed.\n\nThe alternative was harder: make the system underneath the feed increasingly good at understanding the user. Five years later, it still has no search bar."
+        },
+
+        {
+          type: "timeline",
+          heading: "Five years of making a simple experience smarter",
+          nodes: [
+            "Program + skills",
+            "Filters + preferences",
+            "Saved jobs",
+            "Talent Source",
+            "Career Plan alignment",
+            "Connected job system"
+          ]
+        },
+
+        {
+          type: "split",
+          ratio: "50-50",
+          heading: "Searchless discovery created a new problem.",
+          subhead: "People could find a great job—and then struggle to find it again.",
+          body:
+            "During interviews, I watched people try to show me a job they had seen previously and fail to locate it again. Without keyword search, the product needed a way for users to preserve opportunities they wanted to return to.\n\nBefore asking engineering to build the backend, we tested desirability with a false-door experiment. We added save hearts to job cards and descriptions and measured how often people interacted with them, and where.",
+          image: "assets/stories/job-explorer/save-falsedoor.jpg", w: 814, h: 322,
+          alt:
+            "A job description header with an Apply now button and a Save heart beside it, used as the false-door test.",
+          caption:
+            "The false door: a save affordance on job cards and descriptions, instrumented before any backend existed."
+        },
+
+        {
+          type: "steps",
+          items: [
+            { label: "Observed", body: "Users could not relocate jobs they had already found." },
+            { label: "Tested", body: "A false-door save interaction on cards and descriptions." },
+            { label: "Built", body: "Saved Jobs became a production feature." },
+            { label: "Measured", body: "Saved-job users showed stronger Apply Now behavior." }
+          ]
+        },
+
+        {
+          type: "metrics",
+          items: [
+            { value: "~20%", label: "Average Career Navigator Apply Now" },
+            { value: "~34%", label: "Apply Now among users who saved a job" }
+          ],
+          note: "Observed FullStory cohort behavior; not a controlled causal experiment."
+        },
+
+        {
+          type: "annotated",
+          heading: "The product became something we continuously observed.",
+          body:
+            "Job Explorer wasn't designed through a single research phase and then handed off. We regularly interviewed users, watched sessions in FullStory, and built quantitative dashboards to evaluate releases, identify friction, and decide where to investigate next.",
+          align: "center",
+          /* Drop the Job Explorer FullStory screenshot in at the path below and it
+             appears here automatically. Until then this renders as callouts only. */
+          image: "",
+          alt: "The Job Explorer FullStory dashboard.",
+          callouts: [
+            "Apply Now conversion",
+            "Saved-job behavior",
+            "Job-card engagement",
+            "Errors / experience health"
+          ],
+          kicker: "The dashboard didn't tell us what to design. It told us where to look."
+        },
+
+        {
+          type: "cards",
+          heading: "Some of the most important decisions weren't new screens.",
+          items: [
+            {
+              title: "Filters without recreating search",
+              body:
+                "I pushed to add user-controlled filters and used false-door methods to learn which controls mattered before investing in full functionality."
+            },
+            {
+              title: "Making Talent Source understandable",
+              body:
+                "Talent Source opportunities initially included a large legal disclosure. Interviews showed users couldn't explain what made those jobs different. I worked with Legal to preserve required disclosure while replacing the wall of text with clearer hierarchy, illustrations, and storytelling."
+            },
+            {
+              title: "Accessibility as part of product development",
+              body:
+                "The earliest version predated a mature accessibility partnership. Over time, I worked directly with the ADA team so new components and changes were evaluated from design through development."
+            }
+          ]
+        },
+
+        {
+          type: "figure",
+          width: "wide",
+          image: "assets/stories/job-explorer/final-design.png", w: 714, h: 798,
+          alt:
+            "Job Explorer showing a Talent Source job card with a photo header, Talent Match and Tuition Benefit badges, and a job description explaining that the employer invites candidates with these skills to apply.",
+          caption:
+            "Talent Source in place: a photo-led card, plain-language Talent Match and Tuition Benefit badges, and the disclosure rewritten as hierarchy instead of a wall of legal text."
+        },
+
+        {
+          type: "annotated",
+          heading: "Eventually, Job Explorer stopped being just a page.",
+          body:
+            "As Job Explorer matured, its job-card and job-description patterns became reusable components that could surface opportunities throughout the Career Navigator ecosystem.\n\nInstead of redesigning jobs for every new context, we created a connected design language so improvements could cascade across products.",
+          image: "assets/stories/job-explorer/figma-job-cards.png", w: 1410, h: 1273,
+          alt:
+            "A Figma component sheet showing job card variants: contents, selectable cards in default, hover and focus states, standalone cards, and Talent Source cards with imagery.",
+          callouts: [
+            "Standard job card",
+            "Selectable job card",
+            "Talent Source card",
+            "Shared skill treatments"
+          ]
+        },
+
+        {
+          type: "figure",
+          width: "wide",
+          image: "assets/stories/job-explorer/figma-job-description.png", w: 1600, h: 883,
+          alt: "A Figma component sheet for the reusable job description layout and its variants.",
+          caption: "The job description, rebuilt as a component so any product could host a posting."
+        },
+
+        {
+          type: "figure",
+          width: "narrow",
+          image: "assets/stories/job-explorer/miro-inventory.png", w: 1400, h: 819,
+          alt:
+            "A Miro board inventorying every job card and job posting pattern found across the product suite.",
+          caption:
+            "Cross-team inventory used to consolidate job patterns into a shared component model."
+        },
+
+        {
+          type: "impact",
+          heading: "Five years of iteration changed the outcome.",
+          primary: { value: "6% → 25%", label: "Apply Now conversion across Job Explorer's evolution" },
+          secondary: [{ value: "10K+", label: "monthly unique users" }],
+          body:
+            "Apply Now became a recurring business KPI because it represented a measurable step toward career progression. Job Explorer also became the student-facing destination for Talent Source opportunities, supporting new B2B partnerships and expanding the role of the product beyond direct-to-student job discovery."
+        },
+
+        {
+          type: "closing",
+          heading: "What I would have built next",
+          body:
+            "The next opportunity was deeper algorithmic personalization.\n\nAs Career Profile, Career Plan, and the broader product family gave us richer signals about the user, I wanted Job Explorer to become increasingly capable of ranking the right opportunities without asking the user to do more work.",
+          end: "Ask less. Understand more. Show better opportunities."
+        }
       ]
     },
+
+    /* =================================================================
+       CAREER PROFILE
+       ================================================================= */
     {
-      slug: "project-two",
-      title: "Project Name Two",
-      role: "Senior UX Designer",
-      year: "2024",
-      tagline: "One sentence about the problem this project solved.",
-      cover: "",
-      url: "app.example.com",
+      slug: "career-profile",
+      title: "Career Profile",
+      eyebrow: "0→1 product · 2021–2026",
+      headline: "A trophy case of skills became the data layer for an entire product suite.",
+      intro:
+        "I inherited a third-party skills dashboard and rebuilt it into Career Profile: one place where working adults could see everything they bring to the table, and the source of the data that made every other career product personal.",
+
+      role: "Lead product designer",
+      year: "2021–2026",
+      tagline: "One place to keep your career data, and many places it pays off.",
+      cover: "assets/stories/career-profile/career-profile-final.png",
       accent: "vibrant",
-      meta: { Role: "Senior UX Designer", Timeline: "4 months", Team: "TODO", Tools: "TODO" },
-      overview: "TODO: Project overview.",
-      sections: [
-        { heading: "The challenge", body: "TODO", image: "" },
-        { heading: "Process", body: "TODO", image: "" },
-        { heading: "The solution", body: "TODO", image: "" }
+
+      facts: [
+        { label: "Role", value: "Lead / sole product designer" },
+        { label: "Team", value: "Product trio: PM + tech lead + engineering" },
+        { label: "Responsibilities", value: "Discovery, research, experimentation, UX/UI" },
+        { label: "Impact", value: ["11.9K monthly users", "36.2K monthly skills page hits"] }
       ],
-      outcomes: []
+
+      next: {
+        slug: "ai-resume",
+        bridge:
+          "Once the profile knew the person, the next product could ask them for almost nothing."
+      },
+
+      blocks: [
+        {
+          type: "figure",
+          width: "full",
+          image: "assets/stories/career-profile/career-profile-final.png", w: 1320, h: 1268,
+          alt:
+            "The mature Career Profile: a portfolio nav for skills, work history, education and resume, a skills panel split into UOPX and self-identified skills, an active career milestone card, and a row of job cards aligned to the user's skillset.",
+          caption:
+            "The mature Career Profile: skills, work history, education, résumé, preferences and saved items in one place—feeding Job Explorer and Career Plan from a single source."
+        },
+
+        {
+          type: "split",
+          ratio: "40-60",
+          heading: "It started as somebody else's duct tape.",
+          body:
+            "When I joined in 2021, a third-party “skills dashboard” was the business's first attempt at showing how programs mapped to skills. It was held together with duct tape, and it only knew about skills earned at the university.\n\nThat left out the thing our users had the most of. These were working adults who arrived with years of experience, and none of it counted anywhere in the experience.\n\nMy first assignment was to improve that dashboard. What I argued for instead was rebuilding it next to Job Explorer, so a user could see their skills and what those skills were worth in the same place.",
+          image: "assets/stories/career-profile/skills-dashboard-before.png", w: 910, h: 1547,
+          alt:
+            "The original third-party skills dashboard, listing course skills as demonstrated, not demonstrated, or to be evaluated.",
+          caption:
+            "Before: a course-by-course skills dashboard, disconnected from work experience and from any next step."
+        },
+
+        {
+          type: "statement",
+          quote: "Skills only matter if the user believes an employer cares about them.",
+          body:
+            "The hardest questions at the start weren't layout questions. Did people know what a skill was? Did they care? And what would make them willing to add more?\n\nThat last one mattered commercially. Using FullStory, we could correlate profile depth with behavior: users with 10 or more skills on their profile were more likely to click Apply Now in Job Explorer. Profile completeness wasn't vanity data—it was the input that made recommendations good."
+        },
+
+        {
+          type: "split",
+          ratio: "50-50",
+          flip: true,
+          heading: "The first release was deliberately bare.",
+          body:
+            "Version one held self-identified skills only, but it did one important thing: those skills fed Job Explorer results. From the first release, adding a skill visibly changed what the product showed you.\n\nA later release combined university-earned skills with self-identified ones in a single view. I kept them visually distinct on purpose—university skills were evidence of what the user was paying for, and treating them differently gave them more weight.",
+          image: "assets/stories/career-profile/skills-profile-first.png", w: 862, h: 1173,
+          alt:
+            "The first standalone skills profile: a three-column list of self-identified skills with an add/edit skills button, above cards for viewing jobs, getting career advice and updating a résumé.",
+          caption: "The first standalone skills profile, launched alongside Job Explorer."
+        },
+
+        {
+          type: "timeline",
+          heading: "From a skills dashboard to a career profile",
+          nodes: [
+            "Third-party skills dashboard",
+            "Self-identified skills profile",
+            "University + self-identified combined",
+            "Career Profile: work, education, résumé",
+            "Connected to Job Explorer + Career Plan"
+          ]
+        },
+
+        {
+          type: "gallery",
+          heading: "Bounce rate was the real problem, so we ran experiments instead of arguments.",
+          body:
+            "Many people visited to check whether new university skills had appeared, and then left. Rather than debate what would hold their attention, we tested the asks: a persona-based nudge, a prompt inside Job Explorer at the moment skills were clearly relevant, and a skills identifier that let people add skills by past job title instead of by name.",
+          cols: 2,
+          items: [
+            {
+              image: "assets/stories/career-profile/nudge-starter.jpg", w: 539, h: 354,
+              alt: "A modal recommending that a “starter” persona add self-identified skills.",
+              caption: "Persona-based nudges tailored the reason for adding skills."
+            },
+            {
+              image: "assets/stories/career-profile/nudge-enhancer.jpg", w: 860, h: 593,
+              alt: "The same modal written for an “enhancer” persona.",
+              caption: "Same ask, different framing for someone already skills-aware."
+            },
+            {
+              image: "assets/stories/career-profile/skills-nudge.jpg", w: 916, h: 564,
+              alt:
+                "A modal on Job Explorer asking whether the user wants to explore jobs more aligned to their skillset.",
+              caption: "Asking inside Job Explorer, where the payoff was visible."
+            },
+            {
+              image: "assets/stories/career-profile/skills-identifier.jpg", w: 849, h: 466,
+              alt:
+                "The Skills Identifier modal offering to add skills by job title or by name.",
+              caption: "Adding skills by job title, for people who couldn't name their own skills."
+            }
+          ]
+        },
+
+        {
+          type: "split",
+          ratio: "50-50",
+          heading: "Users wouldn't hand over data that only helped us.",
+          body:
+            "Work history was the clearest example. Asking someone to type in years of employment history produced very little, because nothing came back to them for the effort.\n\nTwo things changed that. Inferring skills from a job title turned the ask into a gift: tell us where you worked, and we'll tell you what you know. And once the résumé generator and Career Plan shipped, work history finally had an obvious payoff.",
+          image: "assets/stories/career-profile/work-history-skills.jpg", w: 880, h: 555,
+          alt:
+            "The Career Profile work history form, suggesting related skills from the entered job title that can be added to the profile.",
+          caption:
+            "Enter a job title, get skills back—reciprocity in place of a data-entry request."
+        },
+
+        {
+          type: "cards",
+          heading: "The decisions I'd defend again.",
+          items: [
+            {
+              title: "Separating university skills from self-identified",
+              body:
+                "I wanted these to feel different so university-earned skills carried more weight. It was a retention argument as much as a clarity one: staying enrolled visibly added to what you owned."
+            },
+            {
+              title: "Removing the career-advising callout",
+              body:
+                "We tested a site stripe, an advisor card, and prompts to add skills. The advisor callout didn't earn its space in this experience, so I took it out rather than let the page accumulate asks."
+            },
+            {
+              title: "Letting go of “upcoming skills”",
+              body:
+                "The old dashboard promised skills from future courses. The data didn't exist at scale in the new stack, so we shipped without it and partnered with a data team on the endpoints rather than fake it."
+            }
+          ]
+        },
+
+        {
+          type: "annotated",
+          heading: "The profile was monitored like a product, not a form.",
+          body:
+            "I kept a FullStory dashboard on Career Profile and used it to decide where to look next: which sections people actually used, where they dropped, and whether an experiment moved profile depth.",
+          align: "center",
+          image: "assets/stories/career-profile/fullstory-dashboard.jpg", w: 1200, h: 3171,
+          alt:
+            "The full Career Profile FullStory dashboard, showing navigation usage, user counts, skills page hits and conversion cards.",
+          tall: true,
+          callouts: [
+            "Navigation usage by section",
+            "Profile users and skills page hits",
+            "Skill-count cohorts",
+            "Experiment performance"
+          ],
+          caption: "The whole dashboard, kept as a monitoring habit rather than a one-off readout."
+        },
+
+        {
+          type: "figure",
+          width: "wide",
+          image: "assets/stories/career-profile/jobs-on-skills.jpg", w: 945, h: 797,
+          alt:
+            "A carousel of Job Explorer job cards embedded directly in the Career Profile skills page.",
+          caption:
+            "The payoff of a shared component model: Job Explorer's cards appearing inside Career Profile, so skills and opportunities sat on the same screen."
+        },
+
+        {
+          type: "impact",
+          heading: "One place to update. Many places it paid off.",
+          primary: { value: "11.9K", label: "monthly Career Profile users" },
+          secondary: [
+            { value: "36.2K", label: "monthly skills page hits" },
+            { value: "10+", label: "skills correlated with higher Apply Now" }
+          ],
+          body:
+            "Career Profile ended up tied with Job Explorer as the most visited product in the entire career suite. More importantly, it became the data layer underneath the others: prefilling the résumé generator, grounding Career Plan, and sharpening Job Explorer's recommendations. Users updated their career data once, and three products got better."
+        },
+
+        {
+          type: "closing",
+          heading: "What I would have built next",
+          body:
+            "The profile was finally rich enough to be predictive rather than descriptive.\n\nWith work history, education, skills and preferences in one place, the next step was letting the profile tell users what to do next—surfacing the gap between who they are today and the role they're aiming at, instead of waiting for them to go look.",
+          end: "Ask once. Use it everywhere."
+        }
+      ]
     },
+
+    /* =================================================================
+       AI RÉSUMÉ GENERATOR
+       ================================================================= */
     {
-      slug: "project-three",
-      title: "Project Name Three",
-      role: "Design Systems",
-      year: "2023",
-      tagline: "One sentence about the problem this project solved.",
-      cover: "",
-      url: "system.example.com",
+      slug: "ai-resume",
+      title: "Résumé Generator",
+      eyebrow: "0→1 AI product · 2025",
+      headline: "The thing standing between our users and a job application was a document they didn't have.",
+      intro:
+        "The business believed students weren't applying to jobs because they hadn't graduated yet. Interviews said otherwise: they didn't have a résumé. I designed the first student-facing AI product at the university to remove that blocker, and it moved Apply Now further than anything else we shipped.",
+
+      role: "Lead product designer",
+      year: "2025",
+      tagline: "The first student-facing AI product, aimed at the one blocker nobody had named.",
+      cover: "assets/stories/ai-resume/resume-editor.png",
       accent: "mint",
-      meta: { Role: "Design Systems Lead", Timeline: "TODO", Team: "TODO", Tools: "TODO" },
-      overview: "TODO: Project overview.",
-      sections: [
-        { heading: "The challenge", body: "TODO", image: "" },
-        { heading: "The solution", body: "TODO", image: "" }
+
+      facts: [
+        { label: "Role", value: "Lead / sole product designer" },
+        { label: "Team", value: "Product trio: PM + tech lead + engineering" },
+        { label: "Responsibilities", value: "Discovery, legal partnership, UX/UI, AI interaction" },
+        { label: "Impact", value: ["55% Apply Now with a generic résumé", "72% with a tailored one"] }
       ],
-      outcomes: []
-    },
-    {
-      slug: "project-four",
-      title: "Project Name Four",
-      role: "UX / UI",
-      year: "2022",
-      tagline: "One sentence about the problem this project solved.",
-      cover: "",
-      url: "example.com",
-      accent: "charcoal",
-      meta: { Role: "TODO", Timeline: "TODO", Team: "TODO", Tools: "TODO" },
-      overview: "TODO: Project overview.",
-      sections: [{ heading: "The challenge", body: "TODO", image: "" }],
-      outcomes: []
+
+      next: {
+        slug: "job-explorer",
+        bridge:
+          "A résumé is only worth writing when there's already a job on the screen worth applying to."
+      },
+
+      blocks: [
+        {
+          type: "figure",
+          width: "full",
+          image: "assets/stories/ai-resume/resume-editor.png", w: 1381, h: 1266,
+          alt:
+            "The résumé generator editor: a contents nav for summary, work history, skills and education, a professional summary form with an AI enhancement control, and a live résumé preview with a download button.",
+          caption:
+            "The editor: prefilled from Career Profile, sectioned so people could work in pieces, with AI offered as an assist rather than an author."
+        },
+
+        {
+          type: "statement",
+          heading: "The blocker wasn't confidence. It was a document.",
+          quote: "You can't apply to a job if you don't have a résumé.",
+          body:
+            "This product came out of someone else's research. While interviewing users about Job Explorer, my product trio kept hearing the same reason for not clicking Apply Now: “I just need to update my résumé.” Or they didn't have one at all.\n\nHistorically the business believed people didn't apply because they thought they had to wait for a degree. The interviews reframed it. Either the jobs weren't interesting—which Job Explorer's personalization was already attacking—or the user was blocked by a missing document. Before this, the only help on offer was a static Word template from a career advisor."
+        },
+
+        {
+          type: "timeline",
+          heading: "From a Word template to a tailored résumé",
+          nodes: [
+            "Static Word templates",
+            "Generic job-title résumé (Aug 2025)",
+            "100% scaled launch (Sep 2025)",
+            "Tailored to a Job Explorer posting",
+            "Résumé-only skill control"
+          ]
+        },
+
+        {
+          type: "split",
+          ratio: "50-50",
+          heading: "Most people can't describe their own work.",
+          subhead: "So we stopped asking them to write, and asked them to choose.",
+          body:
+            "The intake asks where you worked, then offers AI-drafted statements about that role for you to select. Recognition is far easier than composition, especially for someone who has never had to translate a job into résumé language.\n\nOne of my favorite fixes on this product had no UI at all. After launch I noticed that clicking “re-generate more items” returned near-duplicates of what the user had already seen. Nothing on screen needed to change; I took it to my engineers and made sure “generate more” genuinely generated new material. The interaction was only as good as what came back.",
+          image: "assets/stories/ai-resume/resume-intake.png", w: 1400, h: 1123,
+          alt:
+            "The résumé intake at the job descriptions step, offering six AI-generated task statements for an Executive Assistant role, two of them selected, with a link to re-generate more items.",
+          caption:
+            "Choose up to six things you actually did, then refine later—selection instead of a blank field."
+        },
+
+        {
+          type: "cards",
+          heading: "Three decisions that shaped the product.",
+          items: [
+            {
+              title: "The first question was the wrong one",
+              body:
+                "Version one opened by asking for a target job title—the exact thing our users had already told us they couldn't name. We lost people at step one. Showing saved job titles helped, but the friction was real and it's why tailoring to a specific posting mattered so much."
+            },
+            {
+              title: "Skills you can hide without losing",
+              body:
+                "At launch, removing a skill from a résumé removed it from your profile. Not every skill belongs on every résumé, but deleting it shouldn't erase your record of it. With tailored résumés I finally separated the two: résumé-only skill control, profile untouched."
+            },
+            {
+              title: "AI with legal in the room",
+              body:
+                "Using AI to draft summaries and job descriptions put us in front of Legal for the entire end-to-end flow. Borrower-defense exposure meant we could never imply a promised job or outcome. We landed on minimal disclaimers placed where they were needed instead of a wall of text."
+            }
+          ]
+        },
+
+        {
+          type: "annotated",
+          heading: "The funnel made the case better than any argument could.",
+          body:
+            "We compared Apply Now behavior for all Job Explorer visitors against the cohorts who downloaded a résumé, and then against those who downloaded one tailored to the posting they were looking at.",
+          image: "assets/stories/ai-resume/applynow-funnel.png", w: 1089, h: 612,
+          alt:
+            "A FullStory conversion chart comparing Job Explorer Apply Now rates: 20.62% of all real users, 55.38% of users who downloaded a résumé, and 71.67% of users who downloaded a tailored résumé.",
+          callouts: [
+            "20.62% — all Job Explorer visitors",
+            "55.38% — downloaded a résumé",
+            "71.67% — downloaded a tailored résumé"
+          ],
+          caption: "FullStory conversion comparison, past 30 days."
+        },
+
+        {
+          type: "metrics",
+          items: [
+            { value: "~21%", label: "Apply Now, all visitors" },
+            { value: "55%", label: "Apply Now with a generic résumé" },
+            { value: "72%", label: "Apply Now with a tailored résumé" }
+          ],
+          note: "Observed FullStory cohort behavior; not a controlled causal experiment."
+        },
+
+        {
+          type: "annotated",
+          heading: "Shipped, then watched.",
+          body:
+            "The résumé generator got its own dashboard from day one, so adoption, drop-off and download behavior were visible without waiting for a readout.",
+          align: "center",
+          image: "assets/stories/ai-resume/fullstory-dashboard.jpg", w: 1200, h: 3324,
+          alt:
+            "The full Career Profile résumé FullStory dashboard, showing unique visitors, traffic over 90 days and funnel cards.",
+          tall: true,
+          callouts: [
+            "Adoption and unique visitors",
+            "Intake step drop-off",
+            "Download completion",
+            "Apply Now by cohort"
+          ]
+        },
+
+        {
+          type: "statement",
+          heading: "What I'd want a reader to know honestly.",
+          body:
+            "We never got to run user interviews on this product after initial concept validation. We deployed a survey that produced real insight, and weren't able to act on most of it. I'd rather say that plainly than dress the process up.\n\nThe most useful feedback we did act on came from career advisors, who pointed out that work history only captured years. “2016–2017” could mean fourteen months or one, which misrepresents a person's experience. We moved to month and year."
+        },
+
+        {
+          type: "impact",
+          heading: "The largest single move in Apply Now we ever made.",
+          primary: { value: "72%", label: "Apply Now among users with a tailored résumé" },
+          secondary: [
+            { value: "55%", label: "with a generic résumé" },
+            { value: "~21%", label: "baseline across all visitors" }
+          ],
+          body:
+            "No other release moved Job Explorer's Apply Now rate this far. It confirmed the reframe the whole product rested on: the barrier was never belief or timing, it was a missing document. This was also the first student-facing AI product at the university, and it set the interaction and disclosure patterns that later AI tools followed."
+        },
+
+        {
+          type: "closing",
+          heading: "What I would have built next",
+          body:
+            "Adoption was the next problem. The tool worked far better than it was known, and awareness was where I'd have spent the following quarter.\n\nAfter that: a holistic review of the whole résumé rather than section-by-section assistance, multiple templates, and extending résumé-only control to work history and education the way we did for skills.",
+          end: "Remove the blocker, and people move on their own."
+        }
+      ]
     }
   ],
 
@@ -138,7 +650,7 @@ window.SITE = {
   timeline: [
     {
       year: "2013",
-      title: "Web Designer I",                            // TODO
+      title: "Web Designer I",
       company: "GoDaddy",
       dates: "2013 – 2016",
       points: [
@@ -149,7 +661,7 @@ window.SITE = {
     },
     {
       year: "2016",
-      title: "Jr. UX/UI Designer",                          // TODO
+      title: "Jr. UX/UI Designer",
       company: "University of Phoenix",
       dates: "2016 – 2017",
       points: [
@@ -188,7 +700,8 @@ window.SITE = {
       points: [
         "Led a team of 6 product centric senior UX designers and content writers to ensure a cohesive user experience in the B2B/careers space ",
         "Championed an agentic support agent, Super Phoebe, that spanned across multiple customer lifecycles and integrated with internal support for a seamless user experience",
-        "Led and monitored an ever expanding design system utilizing MUI as the base, while integrating heavily with the collaboration and direction of our ADA team across a large group of UX designers"]
+        "Led and monitored an ever expanding design system utilizing MUI as the base, while integrating heavily with the collaboration and direction of our ADA team across a large group of UX designers"
+      ]
     }
   ],
 

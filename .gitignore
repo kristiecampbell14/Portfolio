@@ -1,2 +1,9 @@
 .claude/
 do-not-use/
+
+# Source artifacts for the product stories (.docx / .pdf / .mp4 originals).
+# The site serves the processed versions in assets/stories/ instead. Keeping
+# this out of git avoids committing the 174 MB demo video, which exceeds
+# GitHub's file size limit.
+product-stories/
+~$*

@@ -6,23 +6,49 @@ Static site, with no build step. Open `index.html` in a browser to preview, or d
 
 | What | File |
 | --- | --- |
-| **All editable content** (projects, resume, recommendations, email, LinkedIn, password) | `js/content.js` |
+| **All editable content** (stories, resume, recommendations, email, LinkedIn, password) | `js/content.js` |
 | Homepage markup (hero headline, About copy) | `index.html` |
-| Case study template | `project.html` + `js/project.js` |
+| Product story template | `story.html` + `js/story.js` |
 | Styles / brand tokens | `css/styles.css` (colors at the top) |
 | Photo | `assets/img/me.png` |
-| Project images | `assets/work/` |
+| Story artifacts | `assets/stories/<slug>/` |
+| Source artifacts (not served) | `product-stories/` |
 
 Contact lives in the `?` node at the end of the resume timeline (`contact` in `js/content.js`), not in the footer.
 
-## Adding a project
+## Product stories
 
-Copy one of the objects in `projects` in `js/content.js` and give it a unique `slug`. It automatically:
+A story is an entry in `stories` in `js/content.js`. It automatically:
 - appears as a card in the Work carousel
-- gets a detail page at `project.html?id=<slug>`
-- joins the "Next project" loop
+- gets a page at `story.html?id=<slug>`
+- links onward via its `next` (a story `slug` plus a one-line `bridge`)
 
-Useful fields: `cover` (card + page image, 16:10 works best), `hero` (optional different image for the detail page), `meta` (any key/value pairs), `sections` (heading, body, optional `image`/`alt`/`caption`), `outcomes` (big stats). Separate paragraphs in a `body` with a blank line (`\n\n`).
+Story-level fields: `slug`, `title`, `eyebrow`, `headline`, `intro`, `facts` (label + value, where value may be an array for multiple lines), `cover` and `role` / `year` / `tagline` for the carousel card.
+
+### Blocks
+
+The page itself is `blocks: []`, rendered in order by `js/story.js`. Each block picks its layout with `type`:
+
+| `type` | What it renders | Main fields |
+| --- | --- | --- |
+| `figure` | One artifact + caption | `width: full \| wide \| narrow` |
+| `split` | Copy beside an artifact | `ratio: 40-60 \| 50-50 \| 60-40`, `flip`, `heading`, `subhead` |
+| `statement` | A large pull statement + supporting copy | `quote`, `body` |
+| `timeline` | Horizontal evolution strip | `nodes: []` |
+| `steps` | A progression (observed → tested → built → measured) | `items: [{label, body}]` |
+| `metrics` | A strip of numbers | `items: [{value, label}]`, `note` |
+| `annotated` | One artifact + short text callouts | `callouts: []`, `kicker`, `align: center`, `tall` |
+| `gallery` | 2–3 small artifacts side by side | `cols: 2 \| 3`, `items: []` |
+| `cards` | Text cards for decisions that weren't new screens | `items: [{title, body}]` |
+| `impact` | Full-width forest band, huge numbers | `primary`, `secondary: []`, `body` |
+| `closing` | Narrow reading column ending on one large line | `body`, `end` |
+| `prose` | A short paragraph to set up what follows | `align: center` |
+
+Notes:
+- Separate paragraphs inside any `body` with a blank line (`\n\n`).
+- Image blocks take `image`, `alt`, `caption`, and `w` / `h` in the image's real pixel size. The `w` caps display width so a screenshot never upscales past ~1.6× and reserves space while it loads.
+- `tall: true` clips a very tall screenshot (a dashboard) to a readable height with a fade and an "Open full screenshot" link.
+- If the first block is a full-width `figure`, it is treated as the hero image and loads eagerly.
 
 ## Changing the password
 
@@ -33,4 +59,8 @@ Default password: `structuredplay`. To change it, open the site, open the browse
 
 ## Recommended before launch
 - Compress `me.png` (currently ~1.7 MB). Exporting to WebP at ~1200px will cut it to ~150 KB.
-- Replace every `TODO` in `js/content.js` and the About copy in `index.html`.
+- Add the Job Explorer FullStory dashboard screenshot as
+  `assets/stories/job-explorer/fullstory-dashboard.jpg` and point the empty `image`
+  in that story's continuous-discovery block at it (with its `w` / `h`).
+- Exclude `product-stories/` from your deploy, or move it out of the repo. It holds the
+  source `.docx` / `.pdf` / `.mp4` originals and is not needed by the site.
