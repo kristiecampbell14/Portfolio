@@ -998,7 +998,11 @@ body.menu-open {
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
-  padding: 12px max(var(--gutter), calc((100% - var(--max)) / 2 + var(--gutter))) 24px;
+  /* the track is a scroll container, so it clips its own overflow: the top
+     padding has to clear the focused card's 8px lift plus its focus ring,
+     or the ring gets cropped. The negative margin keeps the layout put. */
+  padding: 26px max(var(--gutter), calc((100% - var(--max)) / 2 + var(--gutter))) 24px;
+  margin-top: -14px;
   scroll-padding-inline: max(var(--gutter), calc((100% - var(--max)) / 2 + var(--gutter)));
   cursor: grab;
   /* explicit: this element's own scroll axis is horizontal, so tell the browser
@@ -1204,23 +1208,45 @@ body.menu-open {
   gap: 10px;
 }
 
+/* Same idea as the Kind words bars: the dot is the <i>, and the button around
+   it is padded out to a 44px-tall target that tiles with its neighbours, so
+   there's no dead space to miss into. Negative margins keep the row put. */
 .carousel__dots {
   display: flex;
-  gap: 8px;
+  margin: -17px -4px;
 }
 
 .carousel__dots button {
+  display: block;
+  border: 0;
+  padding: 17px 4px;
+  background: none;
+  cursor: pointer;
+}
+
+.carousel__dots button i {
+  display: block;
   width: 10px;
   height: 10px;
-  padding: 0;
   border-radius: 999px;
-  border: 0;
   background: var(--line);
-  cursor: pointer;
   transition: width .4s var(--ease), background .3s;
 }
 
-.carousel__dots button[aria-current="true"] {
+.carousel__dots button:hover i {
+  background: #c8c7be;
+}
+
+.carousel__dots button:focus-visible {
+  outline: none;
+}
+
+.carousel__dots button:focus-visible i {
+  outline: 2px solid var(--vibrant);
+  outline-offset: 4px;
+}
+
+.carousel__dots button[aria-current="true"] i {
   width: 28px;
   background: var(--forest);
 }
@@ -1763,24 +1789,47 @@ body.menu-open {
   flex-wrap: wrap;
 }
 
+/* The bar is the <i>. The button around it is padded out to a 44px-tall
+   target — the bar alone was a 4px-high sliver to aim at — and the padding
+   is pulled back off with negative margins so nothing moves visually. */
 .quotes__dots {
   display: flex;
-  gap: 8px;
+  margin: -20px -4px;
 }
 
 .quotes__dots button {
-  width: 36px;
-  height: 4px;
+  display: block;
   border: 0;
-  padding: 0;
-  border-radius: 4px;
-  background: var(--line);
+  padding: 20px 4px;
+  background: none;
   cursor: pointer;
-  position: relative;
-  overflow: hidden;
 }
 
-.quotes__dots button::after {
+.quotes__dots button i {
+  display: block;
+  width: 36px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--line);
+  position: relative;
+  overflow: hidden;
+  transition: background .3s;
+}
+
+.quotes__dots button:hover i {
+  background: #c8c7be;
+}
+
+.quotes__dots button:focus-visible {
+  outline: none;
+}
+
+.quotes__dots button:focus-visible i {
+  outline: 2px solid var(--vibrant);
+  outline-offset: 4px;
+}
+
+.quotes__dots button i::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -1789,11 +1838,13 @@ body.menu-open {
   transform-origin: left;
 }
 
-.quotes__dots button[aria-current="true"]::after {
+.quotes__dots button[aria-current="true"] i::after {
   animation: fill var(--quote-ms, 7000ms) linear forwards;
 }
 
-.quotes.is-paused+.quotes__footer button[aria-current="true"]::after {
+/* paused, not restarted: the fill picks up where it stopped (js/main.js keeps
+   the matching timer's remaining time) */
+.quotes.is-paused+.quotes__footer button[aria-current="true"] i::after {
   animation-play-state: paused;
 }
 
@@ -1804,9 +1855,188 @@ body.menu-open {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .quotes__dots button[aria-current="true"]::after {
+  .quotes__dots button[aria-current="true"] i::after {
     animation: none;
     transform: scaleX(1);
+  }
+}
+
+/* =====================================================================
+   CONTACT
+   The static section at the foot of the page. Filled from SITE.contact by
+   js/main.js, the same copy the timeline's "?" node uses.
+   ===================================================================== */
+.contact {
+  position: relative;
+  overflow: hidden;
+  background: var(--forest);
+  color: var(--offwhite);
+}
+
+.contact .section-label {
+  color: var(--mint);
+}
+
+.contact a:focus-visible {
+  outline-color: var(--mint);
+}
+
+.contact__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: clamp(36px, 5vw, 72px);
+  margin-top: clamp(28px, 4vw, 48px);
+}
+
+@media (min-width: 900px) {
+  .contact__grid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.9fr);
+    align-items: center;
+  }
+}
+
+.contact__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  font-size: 12px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--mint);
+}
+
+.contact__status i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--coral);
+  box-shadow: 0 0 0 4px rgba(255, 121, 103, .25);
+}
+
+.contact__title {
+  font-size: clamp(38px, 5.6vw, 76px);
+  letter-spacing: -0.04em;
+  max-width: 10em;
+}
+
+.contact__body {
+  margin-top: 20px;
+  font-size: 18px;
+  max-width: 44ch;
+  color: rgba(245, 244, 239, .82);
+}
+
+.contact__links {
+  display: grid;
+  gap: 14px;
+}
+
+.contact-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2px 20px;
+  padding: 20px 20px 20px 26px;
+  border: 1.5px solid rgba(245, 244, 239, .28);
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background .25s, border-color .25s, transform .3s var(--ease);
+}
+
+.contact-link:hover {
+  background: rgba(245, 244, 239, .07);
+  border-color: var(--mint);
+  transform: translateY(-2px);
+}
+
+.contact-link__label {
+  grid-column: 1;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--mint);
+}
+
+.contact-link__value {
+  grid-column: 1;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(17px, 1.7vw, 21px);
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+/* same mark and swing-to-horizontal as the project cards' arrow */
+.contact-link__mark {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid rgba(245, 244, 239, .4);
+  font-size: 18px;
+  transform: rotate(-45deg);
+  transition: background .3s, color .3s, border-color .3s, transform .5s var(--ease);
+}
+
+.contact-link:hover .contact-link__mark,
+.contact-link:focus-visible .contact-link__mark {
+  background: var(--coral);
+  border-color: var(--coral);
+  color: var(--charcoal);
+  transform: rotate(0deg);
+}
+
+.contact__shapes {
+  position: absolute;
+  right: 5%;
+  top: -10%;
+  width: min(24%, 280px);
+  aspect-ratio: 1;
+  pointer-events: none;
+}
+
+.cs-shape {
+  position: absolute;
+  width: 44%;
+}
+
+.cs-shape--1 {
+  left: 2%;
+  top: 22%;
+  fill: var(--vibrant);
+}
+
+.cs-shape--2 {
+  left: 44%;
+  top: 0;
+  fill: rgba(245, 244, 239, .1);
+}
+
+.cs-shape--3 {
+  left: 62%;
+  top: 50%;
+  width: 26%;
+  fill: var(--coral);
+}
+
+.cs-shape--4 {
+  left: 26%;
+  top: 64%;
+  width: 24%;
+  fill: var(--mint);
+}
+
+@media (max-width: 899px) {
+  .contact__shapes {
+    display: none;
   }
 }
 
@@ -1866,13 +2096,6 @@ body.menu-open {
   .footer__marks {
     display: none;
   }
-}
-
-/* anchor target that accounts for the fixed header */
-.anchor {
-  display: block;
-  height: 0;
-  scroll-margin-top: calc(var(--header-h) + 24px);
 }
 
 
@@ -2067,6 +2290,73 @@ body.menu-open {
 .plate__open:hover {
   background: var(--vibrant);
   transform: translateX(-50%) translateY(-2px);
+}
+
+/* screen recordings: sized from their own aspect ratio, replay on click */
+.plate--film {
+  aspect-ratio: var(--ratio, 16 / 9);
+  background: var(--charcoal);
+  cursor: pointer;
+}
+
+.plate__film {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.film__replay {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  width: 100%;
+  border: 0;
+  background: rgba(32, 35, 34, .34);
+  color: var(--offwhite);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: .04em;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .3s var(--ease);
+}
+
+.film__replay svg {
+  width: 52px;
+  height: 52px;
+  padding: 14px;
+  border-radius: 999px;
+  background: var(--forest);
+  fill: var(--offwhite);
+  transition: background .2s, transform .2s var(--ease);
+}
+
+/* only offered once the clip has run itself through */
+.plate--film.is-done .film__replay {
+  opacity: 1;
+}
+
+.plate--film.is-playing .film__replay {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.film__replay:hover svg,
+.film__replay:focus-visible svg {
+  background: var(--vibrant);
+  transform: scale(1.08);
+}
+
+.film__replay:focus-visible {
+  opacity: 1;
+  outline: 2px solid var(--vibrant);
+  outline-offset: -4px;
 }
 
 .story-caption {
@@ -2269,7 +2559,7 @@ body.menu-open {
   position: absolute;
   left: 0;
   right: 0;
-  top: 7px;
+  top: 9px;
   height: 2px;
   background: var(--line);
 }
@@ -2279,22 +2569,17 @@ body.menu-open {
   padding-right: 20px;
 }
 
+/* one green shape per step, cycled from the same set the resumé timeline uses */
 .evo__dot {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   display: block;
   position: relative;
-  background: var(--paper);
-  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-  box-shadow: inset 0 0 0 16px var(--forest);
-}
-
-.evo__node:first-child .evo__dot {
-  box-shadow: inset 0 0 0 16px var(--coral);
-}
-
-.evo__node:last-child .evo__dot {
-  box-shadow: inset 0 0 0 16px var(--vibrant);
+  overflow: visible;
+  fill: var(--forest);
+  stroke: var(--forest);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
 }
 
 .evo__num {
@@ -2326,7 +2611,7 @@ body.menu-open {
   }
 
   .evo::before {
-    left: 7px;
+    left: 9px;
     right: auto;
     top: 0;
     bottom: 0;
@@ -2344,8 +2629,8 @@ body.menu-open {
 
   .evo__dot {
     position: absolute;
-    left: -30px;
-    top: 4px;
+    left: -32px;
+    top: 2px;
   }
 
   .evo__num {
@@ -2407,6 +2692,11 @@ body.menu-open {
   padding-block: clamp(28px, 4vw, 44px);
   border-top: 2px solid var(--charcoal);
   border-bottom: 1px solid var(--line);
+}
+
+/* set rule: false on the block where the strip follows numbers of its own */
+.metric-strip--flush {
+  border-top: 0;
 }
 
 .metric strong {

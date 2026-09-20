@@ -118,7 +118,8 @@
         </div>
       </a>`).join("");
     cards = [...track.querySelectorAll(".card")];
-    dotsEl.innerHTML = cards.map((_, i) => `<button aria-label="Go to story ${i + 1}"></button>`).join("");
+    // the <i> is the visible dot; the button around it is the larger hit target
+    dotsEl.innerHTML = cards.map((_, i) => `<button aria-label="Go to story ${i + 1}"><i></i></button>`).join("");
     [...dotsEl.children].forEach((b, i) => b.addEventListener("click", () => goTo(i)));
     updateCarousel();
   }
@@ -291,18 +292,37 @@
   }
   setActive(tl.length - 1);
 
-  // arriving from another page at index.html#contact
-  if (location.hash === "#contact") setActive(CONTACT);
+  /* ===================================================================
+     CONTACT: the static section at the foot of the page. "Contact" links
+     (nav, gate) point at it with a plain #contact anchor. It reads from the
+     same SITE.contact as the timeline's "?" node, so there's one place to
+     edit the copy.
+     =================================================================== */
+  const contactCopy = document.querySelector("[data-contact-copy]");
+  const contactLinks = document.querySelector("[data-contact-links]");
+  if (contactCopy && contactLinks) {
+    const c = S.contact || {};
+    contactCopy.innerHTML = `
+      ${c.status ? `<p class="contact__status"><i aria-hidden="true"></i>${e(c.status)}</p>` : ""}
+      <h3 class="contact__title">${e(c.heading || "What's next?")}</h3>
+      <p class="contact__body">${e(c.body || "")}</p>`;
 
-  // "Contact" links jump to the resume timeline and open the "?" node
-  document.addEventListener("click", (ev) => {
-    const a = ev.target.closest('a[href="#contact"]');
-    if (!a) return;
-    ev.preventDefault();
-    setActive(CONTACT);
-    document.querySelector("#resume").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
-    history.replaceState(null, "", "#contact");
-  });
+    // just the path: the label above already says LinkedIn, and the full URL
+    // is long enough to wrap inside the card
+    const handle = S.linkedin.replace(/^https?:\/\/(www\.)?linkedin\.com/i, "").replace(/\/$/, "")
+      || S.linkedin.replace(/^https?:\/\/(www\.)?/, "");
+    contactLinks.innerHTML = `
+      <a class="contact-link" href="mailto:${e(S.email)}">
+        <span class="contact-link__label">${e(c.emailLabel || "Say hello")}</span>
+        <span class="contact-link__value">${e(S.email)}</span>
+        <span class="contact-link__mark" aria-hidden="true">→</span>
+      </a>
+      <a class="contact-link" href="${e(S.linkedin)}" target="_blank" rel="noopener">
+        <span class="contact-link__label">${e(c.linkedinLabel || "LinkedIn")}</span>
+        <span class="contact-link__value">${e(handle)}</span>
+        <span class="contact-link__mark" aria-hidden="true">→</span>
+      </a>`;
+  }
 
   /* ===================================================================
      KIND WORDS: rotating LinkedIn recommendations
@@ -312,6 +332,9 @@
   const recs = S.recommendations;
   const QUOTE_MS = 9000;
   let qi = 0, qTimer = 0, paused = false;
+  // pausing has to resume where it left off, so keep what's left on the clock
+  // rather than restarting the quote (the dot's fill animation pauses in CSS)
+  let qLeft = QUOTE_MS, qRanAt = 0;
 
   const initials = (name) => name.split(/\s+/).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
   quotesEl.innerHTML = recs.map((r) => `
@@ -322,7 +345,8 @@
         <span><cite>${e(r.name)}</cite><span class="who">${e(r.title)}${r.relation ? " · " + e(r.relation) : ""}</span></span>
       </figcaption>
     </figure>`).join("");
-  qDots.innerHTML = recs.map((_, i) => `<button aria-label="Show recommendation ${i + 1}"></button>`).join("");
+  // the <i> is the visible bar; the button around it is a taller, easier-to-hit target
+  qDots.innerHTML = recs.map((_, i) => `<button aria-label="Show recommendation ${i + 1}"><i></i></button>`).join("");
   quotesEl.style.setProperty("--quote-ms", QUOTE_MS + "ms");
   qDots.style.setProperty("--quote-ms", QUOTE_MS + "ms");
   const quoteEls = [...quotesEl.children];
@@ -336,27 +360,36 @@
       b.removeAttribute("aria-current");
       if (j === qi) { void b.offsetWidth; b.setAttribute("aria-current", "true"); }
     });
-    schedule();
+    schedule(QUOTE_MS);
   }
-  function schedule() {
+  // ms: a fresh run for this quote. Omit it to pick the current run back up
+  // with whatever time was left when we paused.
+  function schedule(ms) {
     clearTimeout(qTimer);
-    if (!reduced && !paused && recs.length > 1) qTimer = setTimeout(() => showQuote(qi + 1), QUOTE_MS);
+    if (ms != null) qLeft = ms;
+    if (reduced || paused || recs.length < 2) return;
+    qRanAt = performance.now();
+    qTimer = setTimeout(() => showQuote(qi + 1), qLeft);
   }
   // bind to the inner container, not the whole padded <section> — keeps the section's
   // large top/bottom padding out of the hoverable area (see setPaused notes below)
   const pauseZone = quotesEl.closest(".container");
   let pauseBackstop = 0;
   const setPaused = (v) => {
+    // guard against double-pausing (pointerenter + focusin, say), which would
+    // otherwise subtract the same elapsed time from the clock twice
+    if (paused === v) return;
     paused = v;
     quotesEl.classList.toggle("is-paused", v);
     clearTimeout(pauseBackstop);
     if (v) {
       clearTimeout(qTimer);
+      qLeft = Math.max(0, qLeft - (performance.now() - qRanAt));
       // self-healing backstop: if some edge case never clears the pause (a missed
       // event, an unusual browser), don't let the carousel stay dead for the rest of the visit
       pauseBackstop = setTimeout(() => setPaused(false), 20000);
     } else {
-      showQuote(qi);
+      schedule();
     }
   };
   // Mouse/pen only — scrolling a page can move content under a stationary cursor, which

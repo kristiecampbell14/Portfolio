@@ -26,8 +26,34 @@
     return `<img src="${e(b.image)}" alt="${e(b.alt || "")}"${dims} ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" />`;
   }
 
+  /* basic geometric shapes from the brand's shape language, cycled along a line */
+  const SHAPES = [
+    '<polygon points="12,1.5 21,6.75 21,17.25 12,22.5 3,17.25 3,6.75" />',   // hexagon
+    '<circle cx="12" cy="12" r="10" />',                                      // circle
+    '<polygon points="12,3.2 21.6,20.4 2.4,20.4" />',                         // triangle
+    '<rect x="2.5" y="2.5" width="19" height="19" rx="3" />',                 // square
+    '<polygon points="12,1.5 22.5,12 12,22.5 1.5,12" />'                      // diamond
+  ];
+  const shapeSVG = (i, cls) =>
+    `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${SHAPES[i % SHAPES.length]}</svg>`;
+
+  /* a screen recording: plays itself once on first view, then replays on click */
+  function film(b) {
+    const dims = b.w && b.h ? ` width="${b.w}" height="${b.h}"` : "";
+    const ratio = b.w && b.h ? ` style="--ratio:${b.w} / ${b.h}"` : "";
+    return `<div class="plate plate--film" data-film${ratio}>
+      <video class="plate__film" src="${e(b.video)}"${dims} muted playsinline preload="metadata"
+        aria-label="${e(b.alt || "")}"></video>
+      <button type="button" class="film__replay" data-film-replay>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="8.5,5 19,12 8.5,19" /></svg>
+        <span class="film__replay-text">Play</span>
+      </button>
+    </div>`;
+  }
+
   /* a screenshot, optionally clipped when it is very tall (dashboards) */
   function plate(b, eager) {
+    if (b.video) return film(b);
     if (!b.image) return "";
     const inner = `<div class="plate__shot">${img(b, eager)}</div>`;
     if (!b.tall) return `<div class="plate">${inner}</div>`;
@@ -83,7 +109,7 @@
           ${(b.nodes || [])
             .map(
               (n, i) => `<li class="evo__node">
-                <span class="evo__dot" aria-hidden="true"></span>
+                ${shapeSVG(i, "evo__dot")}
                 <span class="evo__num" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
                 <span class="evo__label">${e(n)}</span>
               </li>`
@@ -109,7 +135,7 @@
 
     metrics: (b) => `
       <section class="story-block story-metrics reveal">
-        <div class="metric-strip">
+        <div class="metric-strip${b.rule === false ? " metric-strip--flush" : ""}">
           ${(b.items || [])
             .map(
               (m) => `<div class="metric">
@@ -127,7 +153,7 @@
         ${b.heading ? `<h2 class="story-h2">${e(b.heading)}</h2>` : ""}
         ${b.body ? `<div class="story-annotated__lede">${paras(b.body)}</div>` : ""}
         ${
-          b.image
+          b.image || b.video
             ? `<figure class="story-annotated__art"${cap(b.w)}>
                  ${plate(b)}
                  ${caption(b)}
@@ -299,6 +325,60 @@
     return out.join("");
   }
 
+  /* Screen recordings play themselves once when they first scroll into view,
+     then sit on their last frame until the viewer asks for another pass. */
+  function wireFilms(scope) {
+    scope.querySelectorAll("[data-film]").forEach((wrap) => {
+      const video = wrap.querySelector("video");
+      const replay = wrap.querySelector("[data-film-replay]");
+      const label = wrap.querySelector(".film__replay-text");
+      if (!video) return;
+
+      /* if the browser refuses to autoplay, fall back to offering the button */
+      const stall = () => {
+        wrap.classList.remove("is-playing");
+        wrap.classList.add("is-done");
+      };
+
+      const play = () => {
+        wrap.classList.add("is-playing");
+        wrap.classList.remove("is-done");
+        if (video.readyState > 0) video.currentTime = 0;
+        const p = video.play();
+        if (p && p.catch) p.catch(stall);
+      };
+
+      video.addEventListener("ended", () => {
+        wrap.classList.remove("is-playing");
+        wrap.classList.add("is-done");
+        if (label) label.textContent = "Replay";
+        if (replay) replay.setAttribute("aria-label", "Replay the dashboard walkthrough");
+      });
+
+      if (replay) replay.addEventListener("click", play);
+      video.addEventListener("click", () => {
+        if (!wrap.classList.contains("is-playing")) play();
+      });
+
+      /* autoplay is only honoured muted, and only once the clip is on screen */
+      if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        wrap.classList.add("is-done");
+        return;
+      }
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            io.disconnect();
+            play();
+          });
+        },
+        { threshold: 0.45 }
+      );
+      io.observe(wrap);
+    });
+  }
+
   function render() {
     const p = story;
     document.title = `${p.title} · Kristie Campbell`;
@@ -359,6 +439,7 @@
       </article>`;
 
     window.observeReveals(root);
+    wireFilms(root);
     window.scrollTo(0, 0);
   }
 

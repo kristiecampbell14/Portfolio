@@ -30,8 +30,8 @@ window.SITE = {
 
   /* -------------------------------------------------------------------
      CONTACT
-     This fills the "?" node at the end of the resume timeline, which
-     replaced the old footer contact section.
+     This fills both the Contact section at the foot of the page and the
+     "?" node at the end of the resume timeline.
      ------------------------------------------------------------------- */
   contact: {
     heading: "What's next?",
@@ -171,10 +171,9 @@ window.SITE = {
           body:
             "Job Explorer wasn't designed through a single research phase and then handed off. We regularly interviewed users, watched sessions in FullStory, and built quantitative dashboards to evaluate releases, identify friction, and decide where to investigate next.",
           align: "center",
-          /* Drop the Job Explorer FullStory screenshot in at the path below and it
-             appears here automatically. Until then this renders as callouts only. */
-          image: "",
-          alt: "The Job Explorer FullStory dashboard.",
+          video: "assets/stories/job-explorer/Dashboard Zoom_JobExplorer.mp4", w: 1280, h: 720,
+          alt:
+            "A screen recording panning across the Job Explorer FullStory dashboard: Apply Now conversion, saved-job behavior, job-card engagement and error tracking.",
           callouts: [
             "Apply Now conversion",
             "Saved-job behavior",
@@ -224,12 +223,8 @@ window.SITE = {
           image: "assets/stories/job-explorer/figma-job-cards.png", w: 1410, h: 1273,
           alt:
             "A Figma component sheet showing job card variants: contents, selectable cards in default, hover and focus states, standalone cards, and Talent Source cards with imagery.",
-          callouts: [
-            "Standard job card",
-            "Selectable job card",
-            "Talent Source card",
-            "Shared skill treatments"
-          ]
+          caption:
+            "The job card as a component set: standard and selectable variants, Talent Source cards with imagery, and one shared skill treatment running through all of them."
         },
 
         {
@@ -307,7 +302,7 @@ window.SITE = {
           alt:
             "The mature Career Profile: a portfolio nav for skills, work history, education and resume, a skills panel split into UOPX and self-identified skills, an active career milestone card, and a row of job cards aligned to the user's skillset.",
           caption:
-            "The mature Career Profile: skills, work history, education, résumé, preferences and saved items in one place—feeding Job Explorer and Career Plan from a single source."
+            "The mature Career Profile: skills, work history, education, resumé, preferences and saved items in one place—feeding Job Explorer and Career Plan from a single source."
         },
 
         {
@@ -339,7 +334,7 @@ window.SITE = {
             "Version one held self-identified skills only, but it did one important thing: those skills fed Job Explorer results. From the first release, adding a skill visibly changed what the product showed you.\n\nA later release combined university-earned skills with self-identified ones in a single view. I kept them visually distinct on purpose—university skills were evidence of what the user was paying for, and treating them differently gave them more weight.",
           image: "assets/stories/career-profile/skills-profile-first.png", w: 862, h: 1173,
           alt:
-            "The first standalone skills profile: a three-column list of self-identified skills with an add/edit skills button, above cards for viewing jobs, getting career advice and updating a résumé.",
+            "The first standalone skills profile: a three-column list of self-identified skills with an add/edit skills button, above cards for viewing jobs, getting career advice and updating a resumé.",
           caption: "The first standalone skills profile, launched alongside Job Explorer."
         },
 
@@ -350,7 +345,7 @@ window.SITE = {
             "Third-party skills dashboard",
             "Self-identified skills profile",
             "University + self-identified combined",
-            "Career Profile: work, education, résumé",
+            "Career Profile: work, education, resumé",
             "Connected to Job Explorer + Career Plan"
           ]
         },
@@ -392,7 +387,7 @@ window.SITE = {
           ratio: "50-50",
           heading: "Users wouldn't hand over data that only helped us.",
           body:
-            "Work history was the clearest example. Asking someone to type in years of employment history produced very little, because nothing came back to them for the effort.\n\nTwo things changed that. Inferring skills from a job title turned the ask into a gift: tell us where you worked, and we'll tell you what you know. And once the résumé generator and Career Plan shipped, work history finally had an obvious payoff.",
+            "Work history was the clearest example. Asking someone to type in years of employment history produced very little, because nothing came back to them for the effort.\n\nTwo things changed that. Inferring skills from a job title turned the ask into a gift: tell us where you worked, and we'll tell you what you know. And once the resumé generator and Career Plan shipped, work history finally had an obvious payoff.",
           image: "assets/stories/career-profile/work-history-skills.jpg", w: 880, h: 555,
           alt:
             "The Career Profile work history form, suggesting related skills from the entered job title that can be added to the profile.",
@@ -428,10 +423,9 @@ window.SITE = {
           body:
             "I kept a FullStory dashboard on Career Profile and used it to decide where to look next: which sections people actually used, where they dropped, and whether an experiment moved profile depth.",
           align: "center",
-          image: "assets/stories/career-profile/fullstory-dashboard.jpg", w: 1200, h: 3171,
+          video: "assets/stories/career-profile/Dashboard Zoom_Profile.mp4", w: 1280, h: 720,
           alt:
-            "The full Career Profile FullStory dashboard, showing navigation usage, user counts, skills page hits and conversion cards.",
-          tall: true,
+            "A screen recording panning across the Career Profile FullStory dashboard: navigation usage by section, profile and skills page hits, skill-count cohorts and experiment performance.",
           callouts: [
             "Navigation usage by section",
             "Profile users and skills page hits",
@@ -439,16 +433,6 @@ window.SITE = {
             "Experiment performance"
           ],
           caption: "The whole dashboard, kept as a monitoring habit rather than a one-off readout."
-        },
-
-        {
-          type: "figure",
-          width: "wide",
-          image: "assets/stories/career-profile/jobs-on-skills.jpg", w: 945, h: 797,
-          alt:
-            "A carousel of Job Explorer job cards embedded directly in the Career Profile skills page.",
-          caption:
-            "The payoff of a shared component model: Job Explorer's cards appearing inside Career Profile, so skills and opportunities sat on the same screen."
         },
 
         {
@@ -460,7 +444,7 @@ window.SITE = {
             { value: "10+", label: "skills correlated with higher Apply Now" }
           ],
           body:
-            "Career Profile ended up tied with Job Explorer as the most visited product in the entire career suite. More importantly, it became the data layer underneath the others: prefilling the résumé generator, grounding Career Plan, and sharpening Job Explorer's recommendations. Users updated their career data once, and three products got better."
+            "Career Profile ended up tied with Job Explorer as the most visited product in the entire career suite. More importantly, it became the data layer underneath the others: prefilling the resumé generator, grounding Career Plan, and sharpening Job Explorer's recommendations. Users updated their career data once, and three products got better."
         },
 
         {
@@ -474,15 +458,15 @@ window.SITE = {
     },
 
     /* =================================================================
-       AI RÉSUMÉ GENERATOR
+       AI resumé GENERATOR
        ================================================================= */
     {
       slug: "ai-resume",
-      title: "Résumé Generator",
+      title: "AI Resumé Generator",
       eyebrow: "0→1 AI product · 2025",
       headline: "The thing standing between our users and a job application was a document they didn't have.",
       intro:
-        "The business believed students weren't applying to jobs because they hadn't graduated yet. Interviews said otherwise: they didn't have a résumé. I designed the first student-facing AI product at the university to remove that blocker, and it moved Apply Now further than anything else we shipped.",
+        "The business believed students weren't applying to jobs because they hadn't graduated yet. Interviews said otherwise: they didn't have a resumé. I designed the first student-facing AI product at the university to remove that blocker, and it moved Apply Now further than anything else we shipped.",
 
       role: "Lead product designer",
       year: "2025",
@@ -494,13 +478,13 @@ window.SITE = {
         { label: "Role", value: "Lead / sole product designer" },
         { label: "Team", value: "Product trio: PM + tech lead + engineering" },
         { label: "Responsibilities", value: "Discovery, legal partnership, UX/UI, AI interaction" },
-        { label: "Impact", value: ["55% Apply Now with a generic résumé", "72% with a tailored one"] }
+        { label: "Impact", value: ["55% Apply Now with a generic resumé", "72% with a tailored one"] }
       ],
 
       next: {
         slug: "job-explorer",
         bridge:
-          "A résumé is only worth writing when there's already a job on the screen worth applying to."
+          "A resumé is only worth writing when there's already a job on the screen worth applying to."
       },
 
       blocks: [
@@ -509,28 +493,27 @@ window.SITE = {
           width: "full",
           image: "assets/stories/ai-resume/resume-editor.png", w: 1381, h: 1266,
           alt:
-            "The résumé generator editor: a contents nav for summary, work history, skills and education, a professional summary form with an AI enhancement control, and a live résumé preview with a download button.",
+            "The resumé generator editor: a contents nav for summary, work history, skills and education, a professional summary form with an AI enhancement control, and a live resumé preview with a download button.",
           caption:
             "The editor: prefilled from Career Profile, sectioned so people could work in pieces, with AI offered as an assist rather than an author."
         },
 
         {
           type: "statement",
-          heading: "The blocker wasn't confidence. It was a document.",
-          quote: "You can't apply to a job if you don't have a résumé.",
+          quote: "You can't apply to a job if you don't have a resumé.",
           body:
-            "This product came out of someone else's research. While interviewing users about Job Explorer, my product trio kept hearing the same reason for not clicking Apply Now: “I just need to update my résumé.” Or they didn't have one at all.\n\nHistorically the business believed people didn't apply because they thought they had to wait for a degree. The interviews reframed it. Either the jobs weren't interesting—which Job Explorer's personalization was already attacking—or the user was blocked by a missing document. Before this, the only help on offer was a static Word template from a career advisor."
+            "This opportunity came out of research for another product. While interviewing users about Job Explorer, my product trio kept hearing the same reason for not clicking Apply Now: “I just need to update my resumé.” Or they didn't have one at all.\n\nHistorically the business believed people didn't apply because they thought they had to wait for a degree. The interviews reframed it. Either the jobs weren't interesting—which Job Explorer's personalization was already attacking—or the user was blocked by a missing document. Before this, the only help on offer was a static Word template from a career advisor."
         },
 
         {
           type: "timeline",
-          heading: "From a Word template to a tailored résumé",
+          heading: "From a Word template to a tailored resumé",
           nodes: [
-            "Static Word templates",
-            "Generic job-title résumé (Aug 2025)",
+            "Static Word templates (Pre-2025)",
+            "Generic job-title resumé (Aug 2025)",
             "100% scaled launch (Sep 2025)",
-            "Tailored to a Job Explorer posting",
-            "Résumé-only skill control"
+            "Tailored to a Job Explorer posting (Apr 2026)",
+            "resumé-only skill control (Apr 2026)"
           ]
         },
 
@@ -540,10 +523,10 @@ window.SITE = {
           heading: "Most people can't describe their own work.",
           subhead: "So we stopped asking them to write, and asked them to choose.",
           body:
-            "The intake asks where you worked, then offers AI-drafted statements about that role for you to select. Recognition is far easier than composition, especially for someone who has never had to translate a job into résumé language.\n\nOne of my favorite fixes on this product had no UI at all. After launch I noticed that clicking “re-generate more items” returned near-duplicates of what the user had already seen. Nothing on screen needed to change; I took it to my engineers and made sure “generate more” genuinely generated new material. The interaction was only as good as what came back.",
+            "The intake asks where you worked, then offers AI-drafted statements about that role for you to select. Recognition is far easier than composition, especially for someone who has never had to translate a job into resumé language.\n\nOne of my favorite fixes on this product had no UI at all. After launch I noticed that clicking “re-generate more items” returned near-duplicates of what the user had already seen. Nothing on screen needed to change; I took it to my engineers and made sure “generate more” genuinely generated new material. The interaction was only as good as what came back.",
           image: "assets/stories/ai-resume/resume-intake.png", w: 1400, h: 1123,
           alt:
-            "The résumé intake at the job descriptions step, offering six AI-generated task statements for an Executive Assistant role, two of them selected, with a link to re-generate more items.",
+            "The resumé intake at the job descriptions step, offering six AI-generated task statements for an Executive Assistant role, two of them selected, with a link to re-generate more items.",
           caption:
             "Choose up to six things you actually did, then refine later—selection instead of a blank field."
         },
@@ -560,7 +543,7 @@ window.SITE = {
             {
               title: "Skills you can hide without losing",
               body:
-                "At launch, removing a skill from a résumé removed it from your profile. Not every skill belongs on every résumé, but deleting it shouldn't erase your record of it. With tailored résumés I finally separated the two: résumé-only skill control, profile untouched."
+                "At launch, removing a skill from a resumé removed it from your profile. Not every skill belongs on every resumé, but deleting it shouldn't erase your record of it. With tailored resumés I finally separated the two: resumé-only skill control, profile untouched."
             },
             {
               title: "AI with legal in the room",
@@ -574,15 +557,10 @@ window.SITE = {
           type: "annotated",
           heading: "The funnel made the case better than any argument could.",
           body:
-            "We compared Apply Now behavior for all Job Explorer visitors against the cohorts who downloaded a résumé, and then against those who downloaded one tailored to the posting they were looking at.",
+            "We compared Apply Now behavior for all Job Explorer visitors against the cohorts who downloaded a resumé, and then against those who downloaded one tailored to the posting they were looking at.",
           image: "assets/stories/ai-resume/applynow-funnel.png", w: 1089, h: 612,
           alt:
-            "A FullStory conversion chart comparing Job Explorer Apply Now rates: 20.62% of all real users, 55.38% of users who downloaded a résumé, and 71.67% of users who downloaded a tailored résumé.",
-          callouts: [
-            "20.62% — all Job Explorer visitors",
-            "55.38% — downloaded a résumé",
-            "71.67% — downloaded a tailored résumé"
-          ],
+            "A FullStory conversion chart comparing Job Explorer Apply Now rates: 20.62% of all real users, 55.38% of users who downloaded a resumé, and 71.67% of users who downloaded a tailored resumé.",
           caption: "FullStory conversion comparison, past 30 days."
         },
 
@@ -590,9 +568,10 @@ window.SITE = {
           type: "metrics",
           items: [
             { value: "~21%", label: "Apply Now, all visitors" },
-            { value: "55%", label: "Apply Now with a generic résumé" },
-            { value: "72%", label: "Apply Now with a tailored résumé" }
+            { value: "55%", label: "Apply Now with a generic resumé" },
+            { value: "72%", label: "Apply Now with a tailored resumé" }
           ],
+          rule: false,
           note: "Observed FullStory cohort behavior; not a controlled causal experiment."
         },
 
@@ -600,12 +579,11 @@ window.SITE = {
           type: "annotated",
           heading: "Shipped, then watched.",
           body:
-            "The résumé generator got its own dashboard from day one, so adoption, drop-off and download behavior were visible without waiting for a readout.",
+            "The resumé generator got its own dashboard from day one, so adoption, drop-off and download behavior were visible without waiting for a readout.",
           align: "center",
-          image: "assets/stories/ai-resume/fullstory-dashboard.jpg", w: 1200, h: 3324,
+          video: "assets/stories/ai-resume/Dashboard Zoom_Resume.mp4", w: 1280, h: 720,
           alt:
-            "The full Career Profile résumé FullStory dashboard, showing unique visitors, traffic over 90 days and funnel cards.",
-          tall: true,
+            "A screen recording panning across the resumé generator FullStory dashboard: unique visitors, traffic over 90 days, and the engagement and download funnel cards.",
           callouts: [
             "Adoption and unique visitors",
             "Intake step drop-off",
@@ -615,18 +593,11 @@ window.SITE = {
         },
 
         {
-          type: "statement",
-          heading: "What I'd want a reader to know honestly.",
-          body:
-            "We never got to run user interviews on this product after initial concept validation. We deployed a survey that produced real insight, and weren't able to act on most of it. I'd rather say that plainly than dress the process up.\n\nThe most useful feedback we did act on came from career advisors, who pointed out that work history only captured years. “2016–2017” could mean fourteen months or one, which misrepresents a person's experience. We moved to month and year."
-        },
-
-        {
           type: "impact",
           heading: "The largest single move in Apply Now we ever made.",
-          primary: { value: "72%", label: "Apply Now among users with a tailored résumé" },
+          primary: { value: "72%", label: "Apply Now among users with a tailored resumé" },
           secondary: [
-            { value: "55%", label: "with a generic résumé" },
+            { value: "55%", label: "with a generic resumé" },
             { value: "~21%", label: "baseline across all visitors" }
           ],
           body:
@@ -637,7 +608,7 @@ window.SITE = {
           type: "closing",
           heading: "What I would have built next",
           body:
-            "Adoption was the next problem. The tool worked far better than it was known, and awareness was where I'd have spent the following quarter.\n\nAfter that: a holistic review of the whole résumé rather than section-by-section assistance, multiple templates, and extending résumé-only control to work history and education the way we did for skills.",
+            "Adoption was the next problem. The tool worked far better than it was known, and awareness was where I'd have spent the following quarter.\n\nAfter that: a holistic review of the whole resumé rather than section-by-section assistance, multiple templates, and extending resumé-only control to work history and education the way we did for skills.",
           end: "Remove the blocker, and people move on their own."
         }
       ]
@@ -688,7 +659,7 @@ window.SITE = {
       dates: "2021 – 2024",
       points: [
         "Served as the design lead in a product trio, collaborating with the product manager and tech lead for career products that served 24,000+ students and alumni per month",
-        "Owned the end-to-end user experience strategy for a suite of student facing products, including 0-1 products such as our Job Explorer, Career Profile, and AI Resume Generator tools",
+        "Owned the end-to-end user experience strategy for a suite of student facing products, including 0-1 products such as our Job Explorer, Career Profile, and AI Resumé Generator tools",
         "Led continuous discovery, research, design, and data efforts with real users via interviews, surveys, A/B tests, and integration with tools such as FullStory to gain a full picture with quantitative and qualitative data points"
       ]
     },
@@ -700,7 +671,7 @@ window.SITE = {
       points: [
         "Led a team of 6 product centric senior UX designers and content writers to ensure a cohesive user experience in the B2B/careers space ",
         "Championed an agentic support agent, Super Phoebe, that spanned across multiple customer lifecycles and integrated with internal support for a seamless user experience",
-        "Led and monitored an ever expanding design system utilizing MUI as the base, while integrating heavily with the collaboration and direction of our ADA team across a large group of UX designers"
+        "Fostered and evolved AI adoption for the UX department in alignment with enterprise IT standards."
       ]
     }
   ],

@@ -14,7 +14,7 @@ Static site, with no build step. Open `index.html` in a browser to preview, or d
 | Story artifacts | `assets/stories/<slug>/` |
 | Source artifacts (not served) | `product-stories/` |
 
-Contact lives in the `?` node at the end of the resume timeline (`contact` in `js/content.js`), not in the footer.
+Contact appears twice, both rendered from `contact` in `js/content.js`: the Contact section above the footer (where the nav's "Contact" link goes) and the `?` node at the end of the resume timeline.
 
 ## Product stories
 
