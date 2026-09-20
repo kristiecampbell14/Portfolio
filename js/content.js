@@ -45,12 +45,14 @@ window.SITE = {
   /* -------------------------------------------------------------------
      WORK PASSWORD
      Only a SHA-256 hash of the password is stored, not the password itself.
-     Current password: 6026906250
-     To change it, open the site, run this in the browser console:
-       await sha256Hex("your new password")
+     Current password: H1R3-KC26 (not case sensitive)
+     The gate lower-cases what is typed before hashing, so the hash below is
+     of the lower-case form. To change it, open the site and run this in the
+     browser console:
+       await sha256Hex("your new password".toLowerCase())
      and paste the result below.
      ------------------------------------------------------------------- */
-  workPasswordHash: "c250fadffe78d0615e8f4bdbf03986f490581f6efd1ed05b5b0c8e5fb0164217",
+  workPasswordHash: "97d96cda7fcc4a4dd3fa46eead00c090dc72f62bf943f09df1048a381fc35052",
 
   /* -------------------------------------------------------------------
      PRODUCT STORIES

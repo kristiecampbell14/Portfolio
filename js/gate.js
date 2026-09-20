@@ -86,7 +86,8 @@
       return (!!stored && stored === window.SITE.workPasswordHash) || window.__kcUnlocked === true;
     },
     async tryUnlock(password) {
-      const hash = await window.sha256Hex(password.trim());
+      // case-folded before hashing, so the password works however it is typed
+      const hash = await window.sha256Hex(password.trim().toLowerCase());
       if (hash === window.SITE.workPasswordHash) {
         window.__kcUnlocked = true;
         store(() => localStorage.setItem(KEY, hash));

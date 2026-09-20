@@ -52,8 +52,10 @@ Notes:
 
 ## Changing the password
 
-Default password: `structuredplay`. To change it, open the site, open the browser console, run
-`await sha256Hex("new password")`, and paste the result into `workPasswordHash`.
+Current password: `H1R3-KC26`. The gate is not case sensitive: it lower-cases what is typed
+before hashing, so the stored hash is of the lower-case form. To change it, open the site, open
+the browser console, run `await sha256Hex("new password".toLowerCase())`, and paste the result
+into `workPasswordHash`.
 
 **Important:** this is a client-side gate. It keeps casual visitors out, but anyone who reads the source can get to the pages and images. For NDA work that needs real protection, use your host's password protection instead (Netlify / Vercel password protection, or Cloudflare Access) and keep this gate as the friendly UI.
 
