@@ -259,7 +259,7 @@ window.SITE = {
           heading: "What I would have built next",
           body:
             "The next opportunity was deeper algorithmic personalization.\n\nAs Career Profile, Career Plan, and the broader product family gave us richer signals about the user, I wanted Job Explorer to become increasingly capable of ranking the right opportunities without asking the user to do more work.",
-          end: "Ask less. Understand more. Show better opportunities."
+          end: "Be predictive, not predictable."
         }
       ]
     },
@@ -308,9 +308,9 @@ window.SITE = {
         {
           type: "split",
           ratio: "40-60",
-          heading: "It started as somebody else's duct tape.",
+          heading: "It started as somebody else's small vision.",
           body:
-            "When I joined in 2021, a third-party “skills dashboard” was the business's first attempt at showing how programs mapped to skills. It was held together with duct tape, and it only knew about skills earned at the university.\n\nThat left out the thing our users had the most of. These were working adults who arrived with years of experience, and none of it counted anywhere in the experience.\n\nMy first assignment was to improve that dashboard. What I argued for instead was rebuilding it next to Job Explorer, so a user could see their skills and what those skills were worth in the same place.",
+            "When I joined in 2021, a third-party “skills dashboard” was the business's first attempt at showing how programs mapped to skills. It was very much a proof-of-concept, and it only knew about skills earned at the university.\n\nThat left out the thing our users had the most of. These were working adults who arrived with years of experience, and none of it counted anywhere in the experience.\n\nMy first assignment was to improve that dashboard. What I argued for instead was rebuilding it next to Job Explorer, so a user could see their skills and what those skills were worth in the same place.",
           image: "assets/stories/career-profile/skills-dashboard-before.png", w: 910, h: 1547,
           alt:
             "The original third-party skills dashboard, listing course skills as demonstrated, not demonstrated, or to be evaluated.",
@@ -671,7 +671,7 @@ window.SITE = {
       points: [
         "Led a team of 6 product centric senior UX designers and content writers to ensure a cohesive user experience in the B2B/careers space ",
         "Championed an agentic support agent, Super Phoebe, that spanned across multiple customer lifecycles and integrated with internal support for a seamless user experience",
-        "Fostered and evolved AI adoption for the UX department in alignment with enterprise IT standards."
+        "Fostered and evolved AI adoption for the UX department in alignment with enterprise IT standards"
       ]
     }
   ],
