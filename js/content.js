@@ -217,7 +217,7 @@ window.SITE = {
 
         {
           type: "annotated",
-          heading: "Eventually, Job Explorer stopped being just a page.",
+          heading: "Eventually, Job Explorer became part of the fabric of Career Navigator.",
           body:
             "As Job Explorer matured, its job-card and job-description patterns became reusable components that could surface opportunities throughout the Career Navigator ecosystem.\n\nInstead of redesigning jobs for every new context, we created a connected design language so improvements could cascade across products.",
           image: "assets/stories/job-explorer/figma-job-cards.png", w: 1410, h: 1273,

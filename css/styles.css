@@ -442,14 +442,6 @@ body.menu-open {
   color: var(--coral);
 }
 
-.menu__script {
-  font-family: var(--font-script);
-  font-size: clamp(36px, 5vw, 56px);
-  color: var(--mint);
-  margin-top: 32px;
-  line-height: 1;
-}
-
 /* =====================================================================
    INTRO: pinned stage. JS sets --p (0→1) as you scroll through it.
    ===================================================================== */
@@ -751,16 +743,12 @@ body.menu-open {
     font-size: 15px;
   }
 
-  .about-body--extra {
-    display: none;
-  }
-
   .scroll-cue {
     display: none;
   }
 }
 
-@media (max-width: 899px) and (max-height: 700px) {
+@media (max-width: 899px) and (max-height: 560px) {
   .about-body {
     display: none;
   }
