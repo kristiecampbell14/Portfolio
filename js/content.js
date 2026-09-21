@@ -324,7 +324,7 @@ window.SITE = {
           type: "statement",
           quote: "Skills only matter if the user believes an employer cares about them.",
           body:
-            "The hardest questions at the start weren't layout questions. Did people know what a skill was? Did they care? And what would make them willing to add more?\n\nThat last one mattered commercially. Using FullStory, we could correlate profile depth with behavior: users with 10 or more skills on their profile were more likely to click Apply Now in Job Explorer. Profile completeness wasn't vanity data—it was the input that made recommendations good."
+            "The hardest questions at the start weren't layout questions. Did people know what a skill was? Did they care? And what would make them willing to add more?\n\nThat last one mattered commercially. Using FullStory, we could correlate profile depth with behavior: users with 10 or more skills on their profile were more likely to click Apply Now in Job Explorer. Profile completeness meant a better overall experience, not vanity data."
         },
 
         {
@@ -333,7 +333,7 @@ window.SITE = {
           flip: true,
           heading: "The first release was deliberately bare.",
           body:
-            "Version one held self-identified skills only, but it did one important thing: those skills fed Job Explorer results. From the first release, adding a skill visibly changed what the product showed you.\n\nA later release combined university-earned skills with self-identified ones in a single view. I kept them visually distinct on purpose—university skills were evidence of what the user was paying for, and treating them differently gave them more weight.",
+            "Version one held self-identified skills only, but it did one important thing: those skills fed Job Explorer results. From the first release, adding a skill visibly changed what the product showed you.\n\nA later release combined university-earned skills with self-identified ones in a single view. I kept them visually distinct on purpose because university skills were evidence of what the user was paying for, and treating them differently gave them more weight.",
           image: "assets/stories/career-profile/skills-profile-first.png", w: 862, h: 1173,
           alt:
             "The first standalone skills profile: a three-column list of self-identified skills with an add/edit skills button, above cards for viewing jobs, getting career advice and updating a resumé.",
@@ -453,7 +453,7 @@ window.SITE = {
           type: "closing",
           heading: "What I would have built next",
           body:
-            "The profile was finally rich enough to be predictive rather than descriptive.\n\nWith work history, education, skills and preferences in one place, the next step was letting the profile tell users what to do next—surfacing the gap between who they are today and the role they're aiming at, instead of waiting for them to go look.",
+            "The profile was finally rich enough to be predictive rather than descriptive.\n\nWith work history, education, skills and preferences in one place, the next step was letting the profile tell users what to do next, surfacing the gap between who they are today and the role they're aiming at, instead of waiting for them to go look.",
           end: "Ask once. Use it everywhere."
         }
       ]
