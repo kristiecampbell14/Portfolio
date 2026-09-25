@@ -10,6 +10,7 @@ Static site, with no build step. Open `index.html` in a browser to preview, or d
 | Homepage markup (hero headline, About copy) | `index.html` |
 | Product story template | `story.html` + `js/story.js` |
 | Styles / brand tokens | `css/styles.css` (colors at the top) |
+| Analytics (Microsoft Clarity) | `js/analytics.js` |
 | Photo | `assets/img/me.png` |
 | Story artifacts | `assets/stories/<slug>/` |
 | Source artifacts (not served) | `product-stories/` |
@@ -58,6 +59,18 @@ the browser console, run `await sha256Hex("new password".toLowerCase())`, and pa
 into `workPasswordHash`.
 
 **Important:** this is a client-side gate. It keeps casual visitors out, but anyone who reads the source can get to the pages and images. For NDA work that needs real protection, use your host's password protection instead (Netlify / Vercel password protection, or Cloudflare Access) and keep this gate as the friendly UI.
+
+## Analytics
+
+Microsoft Clarity (visit counts, heatmaps, session replays) loads on both pages from
+`js/analytics.js`. The project id lives at the top of that file.
+
+It deliberately does nothing on `localhost`, `127.0.0.1`, `*.local`, and `file://`, so your own
+editing and previewing never shows up as traffic. That also means you can only confirm it is
+working on the deployed site, not locally.
+
+Because Clarity replays sessions, it records what visitors see on the gated story pages. To keep
+it to the homepage only, drop the `<script defer src="js/analytics.js">` line from `story.html`.
 
 ## Recommended before launch
 - Compress `me.png` (currently ~1.7 MB). Exporting to WebP at ~1200px will cut it to ~150 KB.

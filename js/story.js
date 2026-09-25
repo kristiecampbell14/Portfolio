@@ -250,7 +250,7 @@
           <div class="gate__row">
             <label class="sr-only" for="pw">Password</label>
             <div class="gate__pw-wrap">
-              <input id="pw" type="password" autocomplete="current-password" placeholder="Password" required autofocus />
+              <input id="pw" type="password" autocomplete="current-password" placeholder="Password" required autofocus data-clarity-mask="true" />
               <button type="button" class="gate__pw-toggle" data-pw-toggle aria-label="Show password" aria-pressed="false">
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                   <path class="eye-shape" d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" />
