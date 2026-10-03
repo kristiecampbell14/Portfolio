@@ -3026,6 +3026,20 @@ body.menu-open {
 }
 
 /* ---------------------------------------------------------------------
+   QUOTE: one testimonial, borrowing the homepage .quote styling. That
+   .quote is hidden until the carousel activates it, so show it outright.
+   --------------------------------------------------------------------- */
+.story-quote .quote {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.story-eyebrow-h+.quote {
+  margin-top: clamp(24px, 3vw, 36px);
+}
+
+/* ---------------------------------------------------------------------
    NEXT STORY
    --------------------------------------------------------------------- */
 .next-story {

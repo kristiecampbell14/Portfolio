@@ -44,6 +44,7 @@ The page itself is `blocks: []`, rendered in order by `js/story.js`. Each block 
 | `impact` | Full-width forest band, huge numbers | `primary`, `secondary: []`, `body` |
 | `closing` | Narrow reading column ending on one large line | `body`, `end` |
 | `prose` | A short paragraph to set up what follows | `align: center` |
+| `quote` | One testimonial, styled like the homepage recommendations | `quote`, `name`, `title`, `initials`, `heading` |
 
 Notes:
 - Separate paragraphs inside any `body` with a blank line (`\n\n`).

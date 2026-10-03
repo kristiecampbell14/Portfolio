@@ -234,6 +234,19 @@
       <section class="story-block story-prose${b.align === "center" ? " is-centered" : ""} reveal">
         ${b.heading ? `<h2 class="story-h2">${e(b.heading)}</h2>` : ""}
         ${paras(b.body)}
+      </section>`,
+
+    /* same markup as the homepage recommendations, so it inherits their styling */
+    quote: (b) => `
+      <section class="story-block story-quote reveal">
+        ${b.heading ? `<h2 class="story-eyebrow-h">${e(b.heading)}</h2>` : ""}
+        <figure class="quote">
+          <blockquote>${e(b.quote)}</blockquote>
+          <figcaption>
+            ${b.initials ? `<span class="avatar" aria-hidden="true">${e(b.initials)}</span>` : ""}
+            <span><cite>${e(b.name)}</cite>${b.title ? `<span class="who">${e(b.title)}</span>` : ""}</span>
+          </figcaption>
+        </figure>
       </section>`
   };
 
