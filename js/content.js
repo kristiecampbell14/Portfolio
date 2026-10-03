@@ -917,9 +917,9 @@ window.SITE = {
       company: "OpenTech Alliance",
       dates: "2017 – 2021",
       points: [
-        "Led UX design and research efforts across the company on a multitude of projects including self-service kiosks, access control systems, and e-commerce websites",
-        "Redesigned StorageTreasures.com to be a mobile-first experience while simultaneously rebranding for better ADA compliance and modernization and differentiation",
-        "Redesigned and improved usability on a new version of customizable self-storage kiosks from start to finish, as well as a third new version exclusively for Public Storage"
+        "Led end-to-end UX strategy, research, and design across a multi-surface product portfolio spanning self-service kiosks, access-control systems, and B2B2C e-commerce experiences",
+        "Led the redesign of OpenTech's self-service kiosk platform and its adaptation for Public Storage, working directly with executive stakeholders including Public Storage's CEO and CTO as well as Product, Engineering, Marketing, and business leadership",
+        "Improved successful click-through in kiosk usability testing from 83% to 91% and supported the Public Storage experience through a 12-facility pilot"
       ]
     },
     {
@@ -928,9 +928,9 @@ window.SITE = {
       company: "University of Phoenix",
       dates: "2021 – 2024",
       points: [
-        "Served as the design lead in a product trio, collaborating with the product manager and tech lead for career products that served 24,000+ students and alumni per month",
-        "Owned the end-to-end user experience strategy for a suite of student facing products, including 0-1 products such as our Job Explorer, Career Profile, and AI Resumé Generator tools",
-        "Led continuous discovery, research, design, and data efforts with real users via interviews, surveys, A/B tests, and integration with tools such as FullStory to gain a full picture with quantitative and qualitative data points"
+        "Led end-to-end product design within a Product, Design, and Engineering trio for career experiences serving approximately 24,000 students and alumni each month",
+        "Designed and launched multiple 0-to-1 experiences, including Job Explorer, Career Profile, and an AI Resume Generator that transformed existing career information into structured, user-editable resume content",
+        "Increased Apply Now conversion from 6% to 25% by addressing friction within job discovery and using behavioral signals across the broader customer journey to identify higher-leverage opportunities, including resume creation, profile completion, skills development, and job-search filtering"
       ]
     },
     {
@@ -939,9 +939,9 @@ window.SITE = {
       company: "University of Phoenix",
       dates: "2024 – 2026",
       points: [
-        "Led a team of 6 product centric senior UX designers and content writers to ensure a cohesive user experience in the B2B/careers space ",
-        "Championed an agentic support agent, Super Phoebe, that spanned across multiple customer lifecycles and integrated with internal support for a seamless user experience",
-        "Fostered and evolved AI adoption for the UX department in alignment with enterprise IT standards"
+        "Led, hired, and developed a team of six senior product designers and content writers across an interconnected portfolio of customer-facing, B2B2C, and B2B products while remaining hands-on as Design Lead for a core career product team",
+        "Directed experience strategy for Super Phoebe and a career-focused AI sub-agent, shaping conversational and adaptive interactions, identifying opportunities to replace legacy self-service journeys, and balancing automation with legal requirements, user control, and trust",
+        "Fostered responsible adoption of AI across the UX organization in alignment with enterprise IT standards while continuing to design and scale AI-enabled customer experiences"
       ]
     }
   ],
