@@ -918,7 +918,7 @@ window.SITE = {
       dates: "2017 – 2021",
       points: [
         "Led end-to-end UX strategy, research, and design across a multi-surface product portfolio spanning self-service kiosks, access-control systems, and B2B2C e-commerce experiences",
-        "Led the redesign of OpenTech's self-service kiosk platform and its adaptation for Public Storage, working directly with executive stakeholders including Public Storage's CEO and CTO as well as Product, Engineering, Marketing, and business leadership",
+        "Led the redesign of OpenTech's self-service kiosk platform and its adaptation for Public Storage, working directly with Public Storage's CIO and VP-level stakeholders as well as Product, Engineering, Marketing, and business leadership",
         "Improved successful click-through in kiosk usability testing from 83% to 91% and supported the Public Storage experience through a 12-facility pilot"
       ]
     },
@@ -929,8 +929,8 @@ window.SITE = {
       dates: "2021 – 2024",
       points: [
         "Led end-to-end product design within a Product, Design, and Engineering trio for career experiences serving approximately 24,000 students and alumni each month",
-        "Designed and launched multiple 0-to-1 experiences, including Job Explorer, Career Profile, and an AI Resume Generator that transformed existing career information into structured, user-editable resume content",
-        "Increased Apply Now conversion from 6% to 25% by addressing friction within job discovery and using behavioral signals across the broader customer journey to identify higher-leverage opportunities, including resume creation, profile completion, skills development, and job-search filtering"
+        "Designed and launched multiple 0-to-1 experiences, including Job Explorer, Career Profile, and an AI Resumé Generator that transformed existing career information into structured, user-editable resumé content",
+        "Increased Apply Now conversion from 6% to 25% by addressing friction within job discovery and using behavioral signals across the broader customer journey to identify higher-leverage opportunities, including resumé creation, profile completion, skills development, and job-search filtering"
       ]
     },
     {
