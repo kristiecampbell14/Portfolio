@@ -3085,6 +3085,68 @@ body.menu-open {
   color: var(--forest);
 }
 
+/* two choices side by side: keep going in the same product, or switch company */
+.next-stories {
+  padding-block: clamp(56px, 8vw, 112px);
+  border-top: 1px solid var(--line);
+}
+
+.next-stories .eyebrow {
+  margin-bottom: clamp(20px, 2.5vw, 28px);
+}
+
+.next-stories__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(28px, 5vw, 72px);
+}
+
+.next-story--pair {
+  padding-block: 18px 0;
+  border-top: 2px solid var(--charcoal);
+}
+
+.next-story__label {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--forest);
+  margin-bottom: 14px;
+}
+
+.next-story--pair .next-story__bridge {
+  font-size: clamp(17px, 1.6vw, 21px);
+  max-width: 34ch;
+}
+
+/* inline rather than flex, so a long title keeps its arrow on the last line */
+.next-story--pair h2 {
+  display: block;
+  font-size: clamp(30px, 3.6vw, 52px);
+}
+
+/* holds the last word and the arrow together; opts out of the arrow's own
+   colour and hover nudge, which `.next-story h2 span` would otherwise give it */
+.next-story--pair h2 .next-story__end {
+  display: inline;
+  white-space: nowrap;
+  color: inherit;
+  transition: none;
+}
+
+.next-story--pair:hover h2 .next-story__end {
+  transform: none;
+}
+
+@media (max-width: 719px) {
+  .next-stories__grid {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+}
+
 /* ---------------------------------------------------------------------
    GATE / NOT FOUND (shared with the work carousel gate)
    --------------------------------------------------------------------- */

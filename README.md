@@ -22,7 +22,9 @@ Contact appears twice, both rendered from `contact` in `js/content.js`: the Cont
 A story is an entry in `stories` in `js/content.js`. It automatically:
 - appears as a card in the Work carousel
 - gets a page at `story.html?id=<slug>`
-- links onward via its `next` (a story `slug` plus a one-line `bridge`)
+- links onward via its `next` (a story `slug` plus a one-line `bridge`). To offer a choice
+  instead, make `next` a list of two, each with a short `label`. AI Resumé does this to offer
+  Job Explorer (same product family) or the kiosk story (a different company).
 
 Story-level fields: `slug`, `title`, `eyebrow`, `headline`, `intro`, `facts` (label + value, where value may be an array for multiple lines), `cover` and `role` / `year` / `tagline` for the carousel card.
 

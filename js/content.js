@@ -484,11 +484,22 @@ window.SITE = {
         { label: "Impact", value: ["55% Apply Now with a generic resumé", "72% with a tailored one"] }
       ],
 
-      next: {
-        slug: "job-explorer",
-        bridge:
-          "A resumé is only worth writing when there's already a job on the screen worth applying to."
-      },
+      /* the last Career Navigator story, so readers choose: back into the same
+         product family, or across to a different company's work */
+      next: [
+        {
+          slug: "job-explorer",
+          label: "Keep going · Same product family",
+          bridge:
+            "A resumé is only worth writing when there's already a job on the screen worth applying to."
+        },
+        {
+          slug: "kiosk-public-storage",
+          label: "Switch gears · OpenTech Alliance, 2018–2020",
+          bridge:
+            "Before Career Navigator, a different kind of screen: a self-service kiosk for the world's largest storage operator."
+        }
+      ],
 
       blocks: [
         {

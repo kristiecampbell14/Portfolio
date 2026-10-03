@@ -312,6 +312,52 @@
       : `<span>${e(v)}</span>`;
   }
 
+  /* `next` is one { slug, bridge } or a list of two, each with a `label`, when
+     the reader should choose (keep going in the same product, or switch company) */
+  function nextStories(p) {
+    const refs = Array.isArray(p.next) ? p.next : [p.next || {}];
+    const fallback = stories[(index + 1) % stories.length];
+    const picks = refs
+      .map((ref) => ({ ref, s: stories.find((s) => s.slug === ref.slug) || (refs.length === 1 ? fallback : null) }))
+      .filter((n) => n.s && n.s.slug !== p.slug);
+    if (!picks.length) return "";
+
+    const href = (n) => `story.html?id=${encodeURIComponent(n.s.slug)}`;
+    const bridge = (n) => (n.ref.bridge ? `<p class="next-story__bridge">${e(n.ref.bridge)}</p>` : "");
+    const title = (n) => `<h2>${e(n.s.title)} <span aria-hidden="true">→</span></h2>`;
+
+    if (picks.length === 1) {
+      const n = picks[0];
+      return `<a class="next-story container" href="${href(n)}">
+          <p class="eyebrow">Next story</p>
+          ${bridge(n)}
+          ${title(n)}
+        </a>`;
+    }
+
+    /* the last word rides with the arrow, so a wrapping title never strands it */
+    const pairTitle = (n) => {
+      const words = n.s.title.split(" ");
+      const last = words.pop();
+      return `<h2>${e(words.join(" "))} <span class="next-story__end">${e(last)} <span aria-hidden="true">→</span></span></h2>`;
+    };
+
+    return `<nav class="next-stories container" aria-label="Next stories">
+        <p class="eyebrow">Where to next</p>
+        <div class="next-stories__grid">
+          ${picks
+            .map(
+              (n) => `<a class="next-story next-story--pair" href="${href(n)}">
+                ${n.ref.label ? `<p class="next-story__label">${e(n.ref.label)}</p>` : ""}
+                ${bridge(n)}
+                ${pairTitle(n)}
+              </a>`
+            )
+            .join("")}
+        </div>
+      </nav>`;
+  }
+
   /* `impact` is a full-bleed colour band, so it can't sit inside the padded
      body column. Blocks are emitted in runs: contained groups around it. */
   const FULL_BLEED = new Set(["impact"]);
@@ -396,9 +442,6 @@
     const p = story;
     document.title = `${p.title} · Kristie Campbell`;
 
-    const fallback = stories[(index + 1) % stories.length];
-    const nextRef = p.next || {};
-    const next = stories.find((s) => s.slug === nextRef.slug) || fallback;
     const facts = p.facts || [];
     const blocks = p.blocks || [];
 
@@ -440,15 +483,7 @@
 
         ${renderBody(rest)}
 
-        ${
-          next && next.slug !== p.slug
-            ? `<a class="next-story container" href="story.html?id=${encodeURIComponent(next.slug)}">
-                 <p class="eyebrow">Next story</p>
-                 ${nextRef.bridge ? `<p class="next-story__bridge">${e(nextRef.bridge)}</p>` : ""}
-                 <h2>${e(next.title)} <span aria-hidden="true">→</span></h2>
-               </a>`
-            : ""
-        }
+        ${nextStories(p)}
       </article>`;
 
     window.observeReveals(root);
