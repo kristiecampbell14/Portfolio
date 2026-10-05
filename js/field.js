@@ -315,6 +315,11 @@
     lastPointer = performance.now();
   }, { passive: true });
 
+  // web fonts change the copy's line boxes, so the shields are measured again once they land
+  document.fonts?.addEventListener("loadingdone", () => {
+    shieldKey = null;
+    if (reduced) { syncShields(); draw(0); }
+  });
   new ResizeObserver(resize).observe(canvas);
   new IntersectionObserver(([en]) => { visible = en.isIntersecting; visible ? start() : stop(); }).observe(canvas);
   document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
