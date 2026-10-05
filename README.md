@@ -11,7 +11,7 @@ Static site, with no build step. Open `index.html` in a browser to preview, or d
 | Product story template | `story.html` + `js/story.js` |
 | Styles / brand tokens | `css/styles.css` (colors at the top) |
 | Analytics (Microsoft Clarity) | `js/analytics.js` |
-| Photo | `assets/img/me.png` |
+| Photo | `assets/img/me.webp` (the page uses this; `me.png` is the full-size original) |
 | Story artifacts | `assets/stories/<slug>/` |
 | Source artifacts (not served) | `product-stories/` |
 
@@ -76,7 +76,6 @@ Because Clarity replays sessions, it records what visitors see on the gated stor
 it to the homepage only, drop the `<script defer src="js/analytics.js">` line from `story.html`.
 
 ## Recommended before launch
-- Compress `me.png` (currently ~1.7 MB). Exporting to WebP at ~1200px will cut it to ~150 KB.
 - Add the Job Explorer FullStory dashboard screenshot as
   `assets/stories/job-explorer/fullstory-dashboard.jpg` and point the empty `image`
   in that story's continuous-discovery block at it (with its `w` / `h`).

@@ -2,9 +2,8 @@
    the dot grid (brand shape language) as it passes. On touch devices it drifts on its own.
    Where the grid runs behind copy, the dots fade down so the text stays readable. */
 (function () {
-  const canvas = document.querySelector("[data-field]");
+  let canvas = document.querySelector("[data-field]");
   if (!canvas) return;
-  const ctx = canvas.getContext("2d");
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const STOPS = [
@@ -14,14 +13,95 @@
     [1.0, [6, 78, 53]]       // forest
   ];
   const BUCKETS = 14;
-  const colors = Array.from({ length: BUCKETS + 1 }, (_, i) => {
+  const rgb = Array.from({ length: BUCKETS + 1 }, (_, i) => {
     const f = i / BUCKETS;
     let k = 0;
     while (k < STOPS.length - 2 && f > STOPS[k + 1][0]) k++;
     const [f0, c0] = STOPS[k], [f1, c1] = STOPS[k + 1];
     const t = (f - f0) / (f1 - f0);
-    return `rgb(${c0.map((v, j) => Math.round(v + (c1[j] - v) * t)).join(",")})`;
+    return c0.map((v, j) => Math.round(v + (c1[j] - v) * t));
   });
+  const colors = rgb.map((c) => `rgb(${c.join(",")})`);
+  const sizes = rgb.map((_, i) => 1.1 + (i / BUCKETS) * 2.6); // dot radius per bucket, CSS px
+
+  /* ---- Renderer -------------------------------------------------------
+     The dots are drawn with WebGL: one draw call of point sprites, each
+     shaded as an anti-aliased circle on the GPU. Filling ~2,000 circles as
+     2D canvas paths kept the GPU busy for several ms every frame and
+     dropped frames while scrolling the intro. The 2D path is the fallback
+     when WebGL isn't available, and ?field=2d forces it, to compare. */
+  const VERT = `
+    attribute vec2 a_pos;
+    attribute float a_r;
+    attribute vec4 a_col;
+    uniform vec2 u_size;
+    varying vec4 v_col;
+    varying float v_r;
+    varying float v_box;
+    void main() {
+      v_col = a_col;
+      v_r = a_r;
+      v_box = ceil(a_r * 2.0) + 2.0;
+      gl_Position = vec4(a_pos.x / u_size.x * 2.0 - 1.0, 1.0 - a_pos.y / u_size.y * 2.0, 0.0, 1.0);
+      gl_PointSize = v_box;
+    }`;
+  const FRAG = `
+    precision mediump float;
+    varying vec4 v_col;
+    varying float v_r;
+    varying float v_box;
+    void main() {
+      float d = length((gl_PointCoord - 0.5) * v_box);
+      float cover = clamp(v_r - d + 0.5, 0.0, 1.0) * v_col.a;
+      gl_FragColor = vec4(v_col.rgb * cover, cover);
+    }`;
+  const STRIDE = 7; // x, y, radius (device px), r, g, b, alpha
+  const unit = rgb.map((c) => c.map((v) => v / 255));
+  let gl = null, glSize = null, glData = new Float32Array(0), glLost = false;
+
+  function setupGL() {
+    const shader = (type, src) => {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      return s;
+    };
+    const prog = gl.createProgram();
+    gl.attachShader(prog, shader(gl.VERTEX_SHADER, VERT));
+    gl.attachShader(prog, shader(gl.FRAGMENT_SHADER, FRAG));
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return false;
+    gl.useProgram(prog);
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    [["a_pos", 2, 0], ["a_r", 1, 2], ["a_col", 4, 3]].forEach(([name, n, offset]) => {
+      const loc = gl.getAttribLocation(prog, name);
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, n, gl.FLOAT, false, STRIDE * 4, offset * 4);
+    });
+    glSize = gl.getUniformLocation(prog, "u_size");
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); // premultiplied, like the 2D canvas
+    gl.clearColor(0, 0, 0, 0);
+    return true;
+  }
+
+  if (new URLSearchParams(location.search).get("field") !== "2d") {
+    gl = canvas.getContext("webgl", { premultipliedAlpha: true, antialias: false, depth: false, stencil: false });
+    // the biggest dot at the capped dpr of 2, plus its anti-aliased edge
+    const pointMax = Math.ceil(sizes[BUCKETS] * 2 * 2) + 2;
+    if (gl && !(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)[1] >= pointMax && setupGL())) {
+      // a canvas keeps the first context it hands out, so the 2D path needs a fresh one
+      const fresh = canvas.cloneNode();
+      canvas.replaceWith(fresh);
+      canvas = fresh;
+      gl = null;
+    }
+  }
+  const ctx = gl ? null : canvas.getContext("2d");
+  if (gl) {
+    canvas.addEventListener("webglcontextlost", (e) => { e.preventDefault(); glLost = true; });
+    canvas.addEventListener("webglcontextrestored", () => { glLost = !setupGL(); if (reduced) draw(0); });
+  }
 
   /* ---- Text shields --------------------------------------------------
      The copy sitting on the field (hero lines, the About column) is
@@ -124,7 +204,7 @@
     w = r.width; h = r.height;
     canvas.width = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     gap = w < 700 ? 22 : 26;
     // a phone gives the copy far less room around it, so fade harder there
     dimMax = w < 700 ? 0.88 : 0.74;
@@ -132,17 +212,20 @@
     dots = [];
     const ox = ((w % gap) + gap) / 2, oy = ((h % gap) + gap) / 2;
     for (let y = oy; y < h; y += gap) for (let x = ox; x < w; x += gap) dots.push(x, y);
+    if (gl) glData = new Float32Array((dots.length / 2) * STRIDE);
     if (!blob.x) { blob.x = blob.tx = w * 0.62; blob.y = blob.ty = h * 0.45; }
     shieldKey = null;
     if (reduced) { syncShields(); draw(0); }
   }
 
   function draw(t) {
-    ctx.clearRect(0, 0, w, h);
+    if (glLost) return;
     const R = Math.max(140, Math.min(w, h) * 0.3);
-    const slots = new Array((SHADES + 1) * (BUCKETS + 1));
-    const sizes = new Float32Array(BUCKETS + 1);
-    for (let i = 0; i <= BUCKETS; i++) sizes[i] = 1.1 + (i / BUCKETS) * 2.6;
+    let slots = null, n = 0;
+    if (!gl) {
+      ctx.clearRect(0, 0, w, h);
+      slots = new Array((SHADES + 1) * (BUCKETS + 1));
+    }
 
     for (let i = 0; i < dots.length; i += 2) {
       let x = dots[i], y = dots[i + 1];
@@ -162,12 +245,32 @@
       const b = Math.round(f * BUCKETS);
       const dim = bounds ? shieldAt(x, y) * (BASE + (1 - BASE) * f) : 0;
       const sh = Math.round(dim * SHADES);
+      if (gl) {
+        const o = n++ * STRIDE, c = unit[b];
+        glData[o] = x * dpr;
+        glData[o + 1] = y * dpr;
+        glData[o + 2] = sizes[b] * dpr;
+        glData[o + 3] = c[0];
+        glData[o + 4] = c[1];
+        glData[o + 5] = c[2];
+        glData[o + 6] = 1 - (sh / SHADES) * dimMax;
+        continue;
+      }
       const slot = sh * (BUCKETS + 1) + b;
       let p = slots[slot];
       if (!p) p = slots[slot] = new Path2D();
       const s = sizes[b];
       p.moveTo(x + s, y);
       p.arc(x, y, s, 0, Math.PI * 2);
+    }
+
+    if (gl) {
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.uniform2f(glSize, canvas.width, canvas.height);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.bufferData(gl.ARRAY_BUFFER, glData.subarray(0, n * STRIDE), gl.DYNAMIC_DRAW);
+      gl.drawArrays(gl.POINTS, 0, n);
+      return;
     }
 
     for (let sh = 0; sh <= SHADES; sh++) {
