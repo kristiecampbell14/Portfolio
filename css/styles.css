@@ -994,10 +994,9 @@ body.menu-open {
   margin-top: -14px;
   scroll-padding-inline: max(var(--gutter), calc((100% - var(--max)) / 2 + var(--gutter)));
   cursor: grab;
-  /* explicit: this element's own scroll axis is horizontal, so tell the browser
-     not to hesitate handing off a touch drag to it (native overflow-x already
-     makes it swipable without this; it just removes first-touch gesture lag) */
-  touch-action: pan-x;
+  /* no touch-action here: pan-x would stop an up/down swipe that starts on a
+     card from scrolling the page. Left as auto, the browser sends sideways
+     swipes to the track and vertical ones to the page. */
 }
 
 .carousel__track::-webkit-scrollbar {
