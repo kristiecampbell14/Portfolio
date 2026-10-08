@@ -592,6 +592,7 @@ body.menu-open {
   opacity: var(--about-o);
   transform: translateY(calc(-50% + var(--about-y)));
   visibility: visible;
+  will-change: transform, opacity;
 }
 
 .about-layer[data-hidden] {
@@ -656,7 +657,7 @@ body.menu-open {
   right: max(0px, calc((100% - var(--max)) / 2));
   height: min(92svh, 58vw);
   aspect-ratio: 1;
-  transform: translateY(calc((1 - var(--photo-t)) * 54%));
+  transform: translate3d(0, var(--photo-y, 54%), 0);
   will-change: transform;
 }
 
@@ -725,7 +726,7 @@ body.menu-open {
   .photo {
     height: min(62svh, 118vw);
     right: -16vw;
-    transform: translateY(calc((1 - var(--photo-t)) * 46%));
+    transform: translate3d(0, var(--photo-y, 46%), 0);
   }
 
   .about-layer {

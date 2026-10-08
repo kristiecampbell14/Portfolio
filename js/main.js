@@ -15,41 +15,85 @@
   const about = intro.querySelector("[data-about]");
   const shapes = [...intro.querySelectorAll(".shape")];
   let scrollP = 0, mx = 0, my = 0, ticking = false;
+  // Cached so a scroll event never reads layout. Measuring during scroll was
+  // shoving the portrait off whole pixels and back, which reads as shiver.
+  let range = 1, origin = 0, photoTravel = 0;
+  const photo = document.querySelector("[data-photo]");
+  const narrow = window.matchMedia("(max-width: 899px)");
 
-  function introProgress() {
-    const total = intro.offsetHeight - stage.offsetHeight;
-    return total > 0 ? clamp(-intro.getBoundingClientRect().top / total) : 0;
+  function measureIntro() {
+    range = Math.max(1, intro.offsetHeight - stage.offsetHeight);
+    origin = intro.offsetTop;
+    photoTravel = (photo ? photo.offsetHeight : 0) * (narrow.matches ? 0.46 : 0.54);
+  }
+
+  let wantHeroInert = true, wantAboutInert = true, inertReady = false, inertTimer = 0;
+  // Shown opacity trails a hard flick so the text can't jump from invisible to
+  // nearly solid in one frame. A normal frame moves it less than this.
+  let aboutShown = 0;
+  const aboutStep = 0.18;
+  function applyInert() {
+    if (hero.inert !== wantHeroInert) hero.inert = wantHeroInert;
+    if (about.inert !== wantAboutInert) about.inert = wantAboutInert;
+  }
+  function scheduleInert() {
+    clearTimeout(inertTimer);
+    inertTimer = setTimeout(applyInert, 200);
   }
 
   function renderIntro() {
     ticking = false;
-    const p = (scrollP = introProgress());
+    const p = (scrollP = clamp((window.scrollY - origin) / range));
     const heroO = 1 - easeOut(clamp(p / 0.4));
-    const aboutO = easeOut(clamp((p - 0.38) / 0.34));
+    const aboutTarget = easeOut(clamp((p - 0.38) / 0.34));
+    const aboutGap = aboutTarget - aboutShown;
+    if (reduced || Math.abs(aboutGap) <= aboutStep) aboutShown = aboutTarget;
+    else aboutShown += Math.sign(aboutGap) * aboutStep;
     stage.style.setProperty("--hero-o", heroO.toFixed(3));
     stage.style.setProperty("--hero-y", (reduced ? 0 : -easeOut(clamp(p / 0.5)) * 90).toFixed(1) + "px");
-    stage.style.setProperty("--photo-t", easeInOut(clamp(p / 0.75)).toFixed(3));
-    stage.style.setProperty("--about-o", aboutO.toFixed(3));
-    stage.style.setProperty("--about-y", (reduced ? 0 : (1 - aboutO) * 40).toFixed(1) + "px");
+    const photoT = reduced ? 1 : easeInOut(clamp(p / 0.75));
+    const dpr = window.devicePixelRatio || 1;
+    const photoY = Math.round((1 - photoT) * photoTravel * dpr) / dpr;
+    stage.style.setProperty("--photo-y", photoY + "px");
+    stage.style.setProperty("--about-o", aboutShown.toFixed(3));
+    stage.style.setProperty("--about-y", (reduced ? 0 : (1 - aboutShown) * 40).toFixed(1) + "px");
     stage.style.setProperty("--line-o", easeOut(clamp((p - 0.72) / 0.28)).toFixed(3));
 
-    // keep hidden layers out of the tab order
-    hero.inert = heroO < 0.05;
-    about.inert = aboutO < 0.05;
-    about.toggleAttribute("data-hidden", aboutO < 0.01);
+    // Don't flip inert while the scroll frame is being painted. Doing it as the
+    // text hits zero costs the next frame (~35ms). Apply it once scrolling settles.
+    wantHeroInert = heroO < 0.05;
+    wantAboutInert = aboutShown < 0.05;
+    if (!inertReady) {
+      applyInert();
+      inertReady = true;
+    } else scheduleInert();
 
     shapes.forEach((s) => {
       const d = parseFloat(s.dataset.depth);
       const ty = reduced ? 0 : -p * d * 140;
-      s.style.transform = `translate(${(mx * d * 14).toFixed(1)}px, ${(my * d * 14 + ty).toFixed(1)}px)`;
+      s.style.transform = `translate3d(${(mx * d * 14).toFixed(1)}px, ${(my * d * 14 + ty).toFixed(1)}px, 0)`;
     });
+    if (aboutShown !== aboutTarget) requestIntro();
+  }
+  // The halo on the about copy is expensive the first time it is painted.
+  // Paint it once offscreen so the first scroll doesn't pay for that.
+  function warmAbout() {
+    if (window.scrollY > 8) return;
+    about.style.opacity = "1";
+    about.style.transform = "translate3d(-140vw, -50%, 0)";
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      about.style.opacity = "";
+      about.style.transform = "";
+      requestIntro();
+    }));
   }
   const requestIntro = () => { if (!ticking) { ticking = true; requestAnimationFrame(renderIntro); } };
   // shared across the page: lets other code (e.g. the quotes carousel) tell a real
   // hover apart from a browser-synthesized one fired while content scrolls under a static cursor
   window.__lastScrollAt = 0;
   window.addEventListener("scroll", () => { window.__lastScrollAt = performance.now(); requestIntro(); }, { passive: true });
-  window.addEventListener("resize", requestIntro);
+  window.addEventListener("resize", () => { measureIntro(); requestIntro(); });
+  narrow.addEventListener("change", () => { measureIntro(); requestIntro(); });
   if (!reduced) {
     window.addEventListener("pointermove", (ev) => {
       if (ev.pointerType === "touch" || scrollP > 0.5) return;
@@ -58,7 +102,9 @@
       requestIntro();
     }, { passive: true });
   }
+  measureIntro();
   renderIntro();
+  document.fonts.ready.then(warmAbout);
 
   // "About" lives inside the pinned stage, so jump to the scroll position where it's fully shown
   document.addEventListener("click", (ev) => {

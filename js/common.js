@@ -25,11 +25,14 @@
   const header = document.querySelector("[data-header]");
   const intro = document.querySelector("[data-intro]");
   if (header) {
-    const onScroll = () => {
-      const threshold = intro ? intro.offsetHeight - window.innerHeight * 0.9 : 10;
-      header.classList.toggle("is-solid", window.scrollY > threshold);
+    let threshold = 10;
+    const measure = () => {
+      threshold = intro ? intro.offsetHeight - window.innerHeight * 0.9 : 10;
     };
+    const onScroll = () => header.classList.toggle("is-solid", window.scrollY > threshold);
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", measure);
+    measure();
     onScroll();
   }
 

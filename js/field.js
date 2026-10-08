@@ -1,6 +1,9 @@
 /* Hero dot field: a soft, wobbling blob follows the cursor and lights up
-   the dot grid (brand shape language) as it passes. On touch devices it drifts on its own.
-   Where the grid runs behind copy, the dots fade down so the text stays readable. */
+   the dot grid (brand shape language) as it passes. The loop pauses while
+   the page is scrolling and after the pointer has been still, so the grid
+   stays off the main thread scrolling needs. Touch and reduced motion draw
+   one resting frame. Where the grid runs behind copy, the dots fade down
+   so the text stays readable. */
 (function () {
   let canvas = document.querySelector("[data-field]");
   if (!canvas) return;
@@ -197,6 +200,8 @@
   let w = 0, h = 0, dpr = 1, gap = 26, dots = [];
   const blob = { x: 0, y: 0, tx: 0, ty: 0 };
   let lastPointer = -Infinity, running = false, visible = true, raf = 0;
+  let scrolling = false, scrollTimer = 0, animTime = 0, lastFrame = 0;
+  const IDLE_MS = 2500;
 
   function resize() {
     const r = canvas.getBoundingClientRect();
@@ -288,21 +293,31 @@
   function frame(t) {
     raf = 0;
     if (!running) return;
-    if (t - lastPointer > 2500) {
-      // idle drift
-      blob.tx = w * (0.55 + 0.25 * Math.sin(t * 0.00023)) ;
-      blob.ty = h * (0.42 + 0.22 * Math.sin(t * 0.00031 + 1.2));
+    // animTime pauses while the loop is stopped, so the wobble doesn't jump
+    // ahead by the time spent scrolling or sitting still.
+    if (!lastFrame) lastFrame = t;
+    const dt = Math.min(32, t - lastFrame);
+    lastFrame = t;
+    animTime += dt;
+
+    const idle = t - lastPointer > IDLE_MS;
+    if (!idle) {
+      blob.x += (blob.tx - blob.x) * 0.07;
+      blob.y += (blob.ty - blob.y) * 0.07;
     }
-    blob.x += (blob.tx - blob.x) * 0.07;
-    blob.y += (blob.ty - blob.y) * 0.07;
     syncShields();
-    draw(t);
+    draw(animTime);
+    if (idle || scrolling) {
+      running = false;
+      return;
+    }
     raf = requestAnimationFrame(frame);
   }
 
   function start() {
-    if (reduced || running || !visible || document.hidden) return;
+    if (reduced || running || !visible || document.hidden || scrolling) return;
     running = true;
+    lastFrame = 0;
     raf = requestAnimationFrame(frame);
   }
   function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; }
@@ -313,6 +328,21 @@
     blob.tx = e.clientX - r.left;
     blob.ty = e.clientY - r.top;
     lastPointer = performance.now();
+    start();
+  }, { passive: true });
+
+  // Freeze the current frame for a scroll. Resume afterward only if the
+  // pointer is still active, so a resting page stays resting.
+  window.addEventListener("scroll", () => {
+    if (!scrolling) {
+      scrolling = true;
+      stop();
+    }
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      scrolling = false;
+      if (performance.now() - lastPointer < IDLE_MS) start();
+    }, 280);
   }, { passive: true });
 
   // web fonts change the copy's line boxes, so the shields are measured again once they land
