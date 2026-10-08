@@ -56,7 +56,7 @@
     if (b.video) return film(b);
     if (!b.image) return "";
     const inner = `<div class="plate__shot">${img(b, eager)}</div>`;
-    if (!b.tall) return `<div class="plate">${inner}</div>`;
+    if (!b.tall) return `<div class="plate${b.bare ? " plate--bare" : ""}">${inner}</div>`;
     return `<div class="plate plate--tall">
       ${inner}
       <a class="plate__open" href="${e(b.image)}" target="_blank" rel="noopener">
@@ -168,7 +168,12 @@
       <section class="story-block story-gallery reveal">
         ${b.heading ? `<h2 class="story-h2">${e(b.heading)}</h2>` : ""}
         ${b.body ? `<div class="story-gallery__lede">${paras(b.body)}</div>` : ""}
-        <div class="gallery gallery--${b.cols || 2}">
+        ${b.carousel ? `<div class="carousel" data-carousel>
+          <div class="carousel__nav">
+            <button type="button" class="carousel__btn" data-carousel-prev aria-label="Previous">←</button>
+            <button type="button" class="carousel__btn" data-carousel-next aria-label="Next">→</button>
+          </div>` : ""}
+        <div class="gallery ${b.carousel ? "gallery--carousel" : `gallery--${b.cols || 2}`}"${b.carousel ? ' tabindex="0" aria-label="Scrollable gallery"' : ""}>
           ${(b.items || [])
             .map(
               (it) => `<figure class="gallery__item">
@@ -178,6 +183,7 @@
             )
             .join("")}
         </div>
+        ${b.carousel ? "</div>" : ""}
       </section>`,
 
     cards: (b) => `
@@ -438,6 +444,31 @@
     });
   }
 
+  /* carousels: arrow buttons scroll one card at a time; disabled at either end */
+  function wireCarousels(scope) {
+    scope.querySelectorAll("[data-carousel]").forEach((wrap) => {
+      const track = wrap.querySelector(".gallery--carousel");
+      const prev = wrap.querySelector("[data-carousel-prev]");
+      const next = wrap.querySelector("[data-carousel-next]");
+      if (!track) return;
+      const step = () => {
+        const item = track.querySelector(".gallery__item");
+        const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+        return item ? item.getBoundingClientRect().width + gap : track.clientWidth;
+      };
+      const sync = () => {
+        const max = track.scrollWidth - track.clientWidth - 2;
+        prev.disabled = track.scrollLeft <= 2;
+        next.disabled = track.scrollLeft >= max;
+      };
+      prev.addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
+      next.addEventListener("click", () => track.scrollBy({ left: step(), behavior: "smooth" }));
+      track.addEventListener("scroll", sync, { passive: true });
+      window.addEventListener("resize", sync);
+      sync();
+    });
+  }
+
   function render() {
     const p = story;
     document.title = `${p.title} · Kristie Campbell`;
@@ -488,6 +519,7 @@
 
     window.observeReveals(root);
     wireFilms(root);
+    wireCarousels(root);
     window.scrollTo(0, 0);
   }
 

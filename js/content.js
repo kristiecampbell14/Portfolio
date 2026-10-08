@@ -288,7 +288,7 @@ window.SITE = {
         { label: "Role", value: "Lead / sole product designer" },
         { label: "Team", value: "Product trio: PM + tech lead + engineering" },
         { label: "Responsibilities", value: "Discovery, research, experimentation, UX/UI" },
-        { label: "Impact", value: ["11.9K monthly users", "36.2K monthly skills page hits"] }
+        { label: "Impact", value: ["+1M skills in the first 8 months", "3.6M skills to date"] }
       ],
 
       next: {
@@ -301,7 +301,7 @@ window.SITE = {
         {
           type: "figure",
           width: "full",
-          image: "assets/stories/career-profile/career-profile-final.png", w: 1320, h: 1268,
+          image: "assets/stories/career-profile/career-profile-final.png", w: 1320, h: 1265,
           alt:
             "The mature Career Profile: a portfolio nav for skills, work history, education and resume, a skills panel split into UOPX and self-identified skills, an active career milestone card, and a row of job cards aligned to the user's skillset.",
           caption:
@@ -334,11 +334,92 @@ window.SITE = {
           flip: true,
           heading: "The first release was deliberately bare.",
           body:
-            "Version one held self-identified skills only, but it did one important thing: those skills fed Job Explorer results. From the first release, adding a skill visibly changed what the product showed you.\n\nA later release combined university-earned skills with self-identified ones in a single view. I kept them visually distinct on purpose because university skills were evidence of what the user was paying for, and treating them differently gave them more weight.",
-          image: "assets/stories/career-profile/skills-profile-first.png", w: 862, h: 1173,
+            "Version one held self-identified skills only, but it did one important thing: those skills fed Job Explorer results. From the first release, adding a skill visibly changed what the product showed you.\n\nA later release combined university-earned skills with self-identified ones in a single view. I kept them visually distinct on purpose because university skills were evidence of what the user was paying for, and treating them differently gave them more weight.\n\nSunsetting the old dashboard and giving every skill one home changed how much the profile got used. Job Explorer traffic rose with it, even though the old dashboard had linked straight to Job Explorer too. Seeing your skills next to the jobs they lined up with is where it started to click.",
+          image: "assets/stories/career-profile/skills-profile-v1.png", w: 1500, h: 1323, bare: true,
           alt:
-            "The first standalone skills profile: a three-column list of self-identified skills with an add/edit skills button, above cards for viewing jobs, getting career advice and updating a resumé.",
+            "The first standalone Skills Profile builder on a desktop monitor: a how-it-works list, a My Skills panel filtered by all, UOPX and self-identified skills, and an add/edit self-identified skills button.",
           caption: "The first standalone skills profile, launched alongside Job Explorer."
+        },
+
+        {
+          type: "metrics",
+          items: [
+            { value: "700%", label: "more Skills Profile users (2,000 → 16,000)" },
+            { value: "471%", label: "more traffic to Job Explorer" },
+            { value: "322.7%", label: "more Apply Now in Job Explorer" }
+          ]
+        },
+
+        {
+          type: "gallery",
+          heading: "More skills meant more applications, so we tested ways to earn them.",
+          body:
+            "Our OKR was the Apply Now rate in Job Explorer, and profile depth was one of the clearest levers we had: people with 10 or more skills on their profile were more likely to apply. The job for Career Profile became simple to state and hard to do: get people to add more skills.\n\nOne of the more meaningful experiments was a persona-based nudge. Users picked the sentence that best described their career goal, and in exchange we offered a “personalized” next step. The next step was always the same, add self-identified skills, but the wording changed to speak to where each person was.",
+          cols: 2,
+          items: [
+            {
+              image: "assets/stories/career-profile/persona-modal.png", w: 640, h: 625,
+              alt:
+                "A modal over My Skills asking “Would you like a personalized career suggestion, Kristie?” with five career-goal sentences to choose from and a Submit button.",
+              caption: "Users chose the sentence that best fit their career goal."
+            },
+            {
+              image: "assets/stories/career-profile/persona-list.png", w: 831, h: 410,
+              alt:
+                "The six career personas behind those sentences: Career Starter, Career Enhancer, Career Switcher, Career Relaunch, Military to Civilian Transition, and Entrepreneur.",
+              caption: "Each sentence mapped to a career persona."
+            }
+          ]
+        },
+
+        {
+          type: "gallery",
+          carousel: true,
+          items: [
+            {
+              image: "assets/stories/career-profile/persona-starter.png", w: 720, h: 490,
+              alt: "The follow-up modal for a “starter”: you may have more skills than you think, even babysitting counts.",
+              caption: "Starter: you may have more skills than you think."
+            },
+            {
+              image: "assets/stories/career-profile/persona-enhancer.png", w: 740, h: 525,
+              alt: "The follow-up modal for an “enhancer”: take inventory of what you bring to the table.",
+              caption: "Enhancer: put the skills you worked hard for to work."
+            },
+            {
+              image: "assets/stories/career-profile/persona-switcher.png", w: 720, h: 500,
+              alt: "The follow-up modal for a “switcher”: take inventory of skills that translate into a new career.",
+              caption: "Switcher: find the skills that carry into a new career."
+            },
+            {
+              image: "assets/stories/career-profile/persona-relauncher.png", w: 720, h: 500,
+              alt: "The follow-up modal for a “relauncher”: past skills help you articulate your strengths as you move forward.",
+              caption: "Relauncher: past skills help you start back up again."
+            },
+            {
+              image: "assets/stories/career-profile/persona-none.png", w: 730, h: 505,
+              alt: "The follow-up modal for someone who chose none of the options: taking inventory helps you understand where you are.",
+              caption: "None of these: the same ask, framed around where you are today."
+            }
+          ]
+        },
+
+        {
+          type: "metrics",
+          items: [
+            { value: "22%", label: "of engaged users added skills, against a 10% baseline" },
+            { value: "1,160", label: "users added skills through the experiment" },
+            { value: "42", label: "Average skills added per user" },
+            { value: "~50K", label: "skills added during the experiment" }
+          ],
+          note: "Baseline: people who visited the Skills Profile and added at least one skill before the experiment. The experiment ran for about three weeks."
+        },
+
+        {
+          type: "prose",
+          heading: "People would trade data for a next step.",
+          body:
+            "Users who engaged with the persona nudge converted at more than twice the baseline rate, and they didn't stop at one skill. The experiment showed us that people were willing to tell us about themselves when they got a next best step in their career in return.\n\nWe used that insight to launch an entirely new product, Career Plan, built by our sister career team under my leadership. But a plan takes more than a list of skills. Career Plan needed to know where someone had worked, what they had studied and what they were working toward, and that's where the Skills Profile became Career Profile."
         },
 
         {
@@ -348,54 +429,30 @@ window.SITE = {
             "Third-party skills dashboard",
             "Self-identified skills profile",
             "University + self-identified combined",
-            "Career Profile: work, education, resumé",
-            "Connected to Job Explorer + Career Plan"
-          ]
-        },
-
-        {
-          type: "gallery",
-          heading: "Bounce rate was the real problem, so we ran experiments instead of arguments.",
-          body:
-            "Many people visited to check whether new university skills had appeared, and then left. Rather than debate what would hold their attention, we tested the asks: a persona-based nudge, a prompt inside Job Explorer at the moment skills were clearly relevant, and a skills identifier that let people add skills by past job title instead of by name.",
-          cols: 2,
-          items: [
-            {
-              image: "assets/stories/career-profile/nudge-starter.jpg", w: 539, h: 354,
-              alt: "A modal recommending that a “starter” persona add self-identified skills.",
-              caption: "Persona-based nudges tailored the reason for adding skills."
-            },
-            {
-              image: "assets/stories/career-profile/nudge-enhancer.jpg", w: 860, h: 593,
-              alt: "The same modal written for an “enhancer” persona.",
-              caption: "Same ask, different framing for someone already skills-aware."
-            },
-            {
-              image: "assets/stories/career-profile/skills-nudge.jpg", w: 916, h: 564,
-              alt:
-                "A modal on Job Explorer asking whether the user wants to explore jobs more aligned to their skillset.",
-              caption: "Asking inside Job Explorer, where the payoff was visible."
-            },
-            {
-              image: "assets/stories/career-profile/skills-identifier.jpg", w: 849, h: 466,
-              alt:
-                "The Skills Identifier modal offering to add skills by job title or by name.",
-              caption: "Adding skills by job title, for people who couldn't name their own skills."
-            }
+            "Connected to Job Explorer + Career Plan",
+            "Career Profile: work, education, resumé"
           ]
         },
 
         {
           type: "split",
           ratio: "50-50",
-          heading: "Users wouldn't hand over data that only helped us.",
+          heading: "Tell us where you worked, and we'll tell you what you know.",
           body:
-            "Work history was the clearest example. Asking someone to type in years of employment history produced very little, because nothing came back to them for the effort.\n\nTwo things changed that. Inferring skills from a job title turned the ask into a gift: tell us where you worked, and we'll tell you what you know. And once the resumé generator and Career Plan shipped, work history finally had an obvious payoff.",
-          image: "assets/stories/career-profile/work-history-skills.jpg", w: 880, h: 555,
+            "In 2024 we expanded the Skills Profile into Career Profile, adding work history, education history, Job Explorer preferences and saved career activity. Career Plan was the first product to draw on it, and a meaningful suite of career products needed the same picture of who our users were and what they wanted to achieve.\n\nWork history was foundational. Rather than ask people for job titles in one place and skills in another, we let them add skills while they entered their work history. Type a job title, and the form suggests the skills that come with it.",
+          image: "assets/stories/career-profile/work-history-inferred-skills.png", w: 923, h: 743,
           alt:
             "The Career Profile work history form, suggesting related skills from the entered job title that can be added to the profile.",
           caption:
             "Enter a job title, get skills back—reciprocity in place of a data-entry request."
+        },
+
+        {
+          type: "metrics",
+          items: [
+            { value: "86%", label: "of users who added or edited work history added inferred skills" },
+            { value: "18", label: "Average skills added per user, against a goal of 10" }
+          ]
         },
 
         {
@@ -408,14 +465,14 @@ window.SITE = {
                 "I wanted these to feel different so university-earned skills carried more weight. It was a retention argument as much as a clarity one: staying enrolled visibly added to what you owned."
             },
             {
-              title: "Removing the career-advising callout",
+              title: "Turning off the Persona Experiment",
               body:
-                "We tested a site stripe, an advisor card, and prompts to add skills. The advisor callout didn't earn its space in this experience, so I took it out rather than let the page accumulate asks."
+                "Although it performed really well, it wasn't meant to be a production feature. We took what we learned and made a more meaningful product out of it."
             },
             {
-              title: "Letting go of “upcoming skills”",
+              title: "Removing a Career Advising callout",
               body:
-                "The old dashboard promised skills from future courses. The data didn't exist at scale in the new stack, so we shipped without it and partnered with a data team on the endpoints rather than fake it."
+                "We added a callout to schedule time with a career advisor, and it only converted at 1.7%. This wasn't the right place for that suggestion, so we replaced it with Career Plan progress instead."
             }
           ]
         },
@@ -441,9 +498,9 @@ window.SITE = {
         {
           type: "impact",
           heading: "One place to update. Many places it paid off.",
-          primary: { value: "11.9K", label: "monthly Career Profile users" },
+          primary: { value: "3.6M", label: "skills added by users" },
           secondary: [
-            { value: "36.2K", label: "monthly skills page hits" },
+            { value: "11.9K", label: "monthly Career Profile users" },
             { value: "10+", label: "skills correlated with higher Apply Now" }
           ],
           body:
