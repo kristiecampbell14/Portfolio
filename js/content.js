@@ -538,7 +538,7 @@ window.SITE = {
         { label: "Role", value: "Lead / sole product designer" },
         { label: "Team", value: "Product trio: PM + tech lead + engineering" },
         { label: "Responsibilities", value: "Discovery, legal partnership, UX/UI, AI interaction" },
-        { label: "Impact", value: ["55% Apply Now with a generic resumé", "72% with a tailored one"] }
+        { label: "Impact", value: ["~21% Apply Now baseline", "55% with a generated resumé", "72% when tailored to the posting"] }
       ],
 
       /* the last Career Navigator story, so readers choose: back into the same
@@ -607,14 +607,14 @@ window.SITE = {
           heading: "Three decisions that shaped the product.",
           items: [
             {
-              title: "The first question was the wrong one",
+              title: "The step we knew would cost us",
               body:
-                "Version one opened by asking for a target job title—the exact thing our users had already told us they couldn't name. We lost people at step one. Showing saved job titles helped, but the friction was real and it's why tailoring to a specific posting mattered so much."
+                "Tailoring to a specific posting was the goal from the start, but it wasn't buildable for version one. So v1 opened by asking for a target job title—the exact thing our users had told us they couldn't name. We took that cost on purpose to get working resumés into people's hands months earlier, softened it by showing saved job titles, and removed the step entirely once tailoring shipped."
             },
             {
               title: "Skills you can hide without losing",
               body:
-                "At launch, removing a skill from a resumé removed it from your profile. Not every skill belongs on every resumé, but deleting it shouldn't erase your record of it. With tailored resumés I finally separated the two: resumé-only skill control, profile untouched."
+                "At launch, removing a skill from a resumé removed it from your profile. Not every skill belongs on every resumé, but deleting it shouldn't erase your record of it. With tailored resumés I also separated the two: resumé-only skill control, profile untouched."
             },
             {
               title: "AI with legal in the room",
@@ -639,8 +639,8 @@ window.SITE = {
           type: "metrics",
           items: [
             { value: "~21%", label: "Apply Now, all visitors" },
-            { value: "55%", label: "Apply Now with a generic resumé" },
-            { value: "72%", label: "Apply Now with a tailored resumé" }
+            { value: "55%", label: "Apply Now with a generated resumé" },
+            { value: "72%", label: "Apply Now when tailored to the posting" }
           ],
           rule: false,
           note: "Observed FullStory cohort behavior; not a controlled causal experiment."
@@ -666,9 +666,9 @@ window.SITE = {
         {
           type: "impact",
           heading: "The largest single move in Apply Now we ever made.",
-          primary: { value: "72%", label: "Apply Now among users with a tailored resumé" },
+          primary: { value: "72%", label: "Apply Now when the resumé was tailored to the posting" },
           secondary: [
-            { value: "55%", label: "with a generic resumé" },
+            { value: "55%", label: "with a resumé generated for a target job title" },
             { value: "~21%", label: "baseline across all visitors" }
           ],
           body:
