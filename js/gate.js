@@ -101,5 +101,73 @@
     }
   };
 
+  /* A link can carry the password: ?k=<password> unlocks on arrival, so a
+     portfolio link pasted into an application form never shows the gate. */
+
+  function stripKey(params) {
+    params.delete("k");
+    const qs = params.toString();
+    try {
+      history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
+    } catch (e) { /* history API unavailable or blocked */ }
+  }
+
+  /* Storage is unavailable, so the URL has to carry the unlock instead: stamp
+     the key onto same-origin links, including the cards main.js and story.js
+     render after this runs. Attribute changes do not re-trigger a childList
+     observer, so rewriting hrefs here cannot loop. */
+  function carryKeyOnLinks(key) {
+    const stamp = () => {
+      document.querySelectorAll("a[href]").forEach((a) => {
+        let url;
+        try { url = new URL(a.getAttribute("href"), location.href); } catch (e) { return; }
+        if (url.origin !== location.origin || url.searchParams.has("k")) return;
+        url.searchParams.set("k", key);
+        a.setAttribute("href", url.pathname + url.search + url.hash);
+      });
+    };
+    let queued = false;
+    const schedule = () => {
+      if (queued) return;
+      queued = true;
+      Promise.resolve().then(() => { queued = false; stamp(); });
+    };
+    stamp();
+    document.addEventListener("DOMContentLoaded", stamp);
+    try {
+      new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true });
+    } catch (e) { /* no MutationObserver */ }
+  }
+
+  (function consumeUrlKey() {
+    let params;
+    try { params = new URLSearchParams(location.search); } catch (e) { return; }
+    const key = params.get("k");
+    if (!key) return;
+
+    if (sha256Fallback(key.trim().toLowerCase()) !== window.SITE.workPasswordHash) {
+      stripKey(params);
+      return;
+    }
+
+    window.__kcUnlocked = true;
+
+    /* Did the unlock actually persist? Managed browsers and strict privacy
+       settings can block site storage, in which case localStorage keeps
+       nothing and the next page would gate the visitor all over again. */
+    const persisted = store(() => {
+      localStorage.setItem(KEY, window.SITE.workPasswordHash);
+      return localStorage.getItem(KEY) === window.SITE.workPasswordHash;
+    });
+
+    if (persisted) {
+      /* Storage carries it from here, so take the password out of the address
+         bar, out of anything copied onward, and out of session replay. */
+      stripKey(params);
+    } else {
+      carryKeyOnLinks(key);
+    }
+  })();
+
   window.wirePasswordToggle(document);
 })();
