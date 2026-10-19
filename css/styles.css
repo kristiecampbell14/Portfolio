@@ -34,6 +34,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* the header is fixed, so an anchored section would otherwise land under it */
+  scroll-padding-top: calc(var(--header-h) + 12px);
   -webkit-text-size-adjust: 100%;
   overflow-x: clip;
 }
@@ -298,6 +300,55 @@ button {
   font-size: 18px;
   text-decoration: none;
   letter-spacing: -0.01em;
+}
+
+/* Inline section nav. Desktop gets the links in the bar; below 900px they
+   give way to the menu button and its full-screen takeover, which is the
+   part of the old nav worth keeping. */
+.nav-inline {
+  display: none;
+}
+
+.nav-inline ul {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-inline a {
+  display: block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  text-decoration: none;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  transition: background .2s var(--ease), color .2s;
+}
+
+.nav-inline a:hover {
+  color: var(--ink);
+  background: var(--paper-2);
+}
+
+/* Set by the scroll spy in common.js, not by the link that was clicked —
+   it follows where you actually are on the page. */
+.nav-inline a[aria-current="true"] {
+  color: var(--forest);
+  background: var(--mint);
+}
+
+@media (min-width: 900px) {
+  .nav-inline {
+    display: block;
+  }
+
+  .site-header .menu-toggle {
+    display: none;
+  }
 }
 
 .menu-toggle {
@@ -1776,23 +1827,23 @@ body.menu-open {
   color: var(--ink-soft);
 }
 
+/* The control row is the work carousel's row: dots hard left, arrows hard
+   right, full width. The LinkedIn link is a destination rather than a
+   carousel control, so it sits on its own line underneath. */
 .quotes__footer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  margin-top: 44px;
+}
+
+.quotes__controls {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  margin-top: 44px;
-  flex-wrap: wrap;
-}
-
-/* Bars and arrows travel together on the left, the LinkedIn link holds the
-   right — the same split the work carousel's controls use. Either control
-   drives the same showQuote(), so they stay in step. */
-.quotes__nav {
-  display: flex;
-  align-items: center;
   gap: 20px;
-  flex-wrap: wrap;
+  width: 100%;
 }
 
 .quotes__arrows {
@@ -1800,31 +1851,40 @@ body.menu-open {
   gap: 10px;
 }
 
-/* The bar is the <i>. The button around it is padded out to a 44px-tall
-   target — the bar alone was a 4px-high sliver to aim at — and the padding
-   is pulled back off with negative margins so nothing moves visually. */
+/* Same dots as the work carousel: the dot is the <i>, and the button around
+   it is padded out to a 44px-tall target that tiles with its neighbours, so
+   there's no dead space to miss into. Negative margins keep the row put.
+   The one difference is the fill below, which runs the auto-advance clock. */
 .quotes__dots {
   display: flex;
-  margin: -20px -4px;
+  margin: -17px -4px;
 }
 
 .quotes__dots button {
   display: block;
   border: 0;
-  padding: 20px 4px;
+  padding: 17px 4px;
   background: none;
   cursor: pointer;
 }
 
 .quotes__dots button i {
   display: block;
-  width: 36px;
-  height: 4px;
-  border-radius: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
   background: var(--line);
   position: relative;
   overflow: hidden;
-  transition: background .3s;
+  transition: width .4s var(--ease), background .3s;
+}
+
+/* Vibrant marks the active quote the moment it changes; the forest fill then
+   sweeps across it as the timer runs, ending on the same solid forest pill
+   the work carousel shows. Mint read too close to the paper to track. */
+.quotes__dots button[aria-current="true"] i {
+  width: 28px;
+  background: var(--vibrant);
 }
 
 .quotes__dots button:hover i {
@@ -2141,6 +2201,45 @@ body.menu-open {
 
 .back-link:hover span {
   transform: translateX(-4px);
+}
+
+/* The story bar carries only the way out of the story. There is no hero for
+   it to sit over, so it is solid from the start instead of waiting on the
+   scroll threshold common.js uses for the home page. */
+.story-header {
+  background: rgba(245, 244, 239, .86);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 0 var(--line);
+}
+
+.story-header .back-link {
+  font-size: 16px;
+}
+
+.close-link {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-right: -8px;
+  border-radius: 50%;
+  color: var(--ink-soft);
+  transition: background .2s var(--ease), color .2s;
+}
+
+.close-link svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+}
+
+.close-link:hover {
+  color: var(--ink);
+  background: var(--paper-2);
 }
 
 /* ---------------------------------------------------------------------

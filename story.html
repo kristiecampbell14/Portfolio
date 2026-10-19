@@ -18,23 +18,16 @@
 </head>
 
 <body class="story-page">
-  <header class="site-header" data-header>
-    <a class="back-link" href="index.html#work"><span aria-hidden="true">←</span> Back</a>
-    <button class="menu-toggle" aria-expanded="false" aria-controls="menu" data-menu-toggle>
-      <span class="sr-only">Menu</span>
-      <span class="menu-toggle__lines" aria-hidden="true"><i></i><i></i><i></i></span>
-    </button>
+  <!-- A story page is a detour, so the bar is the way back out of it and
+       nothing else. Both controls lead to the same place. -->
+  <header class="site-header story-header" data-header>
+    <a class="back-link" href="index.html#work"><span aria-hidden="true">←</span> Back to work</a>
+    <a class="close-link" href="index.html#work" aria-label="Close story and return to work">
+      <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+        <path d="M15 5 5 15M5 5l10 10" />
+      </svg>
+    </a>
   </header>
-
-  <nav class="menu" id="menu" aria-label="Main" data-menu hidden>
-    <ol class="menu__list">
-      <li><a href="index.html#top">Home</a></li>
-      <li><a href="index.html#about">About</a></li>
-      <li><a href="index.html#resume">Resume snapshot</a></li>
-      <li><a href="index.html#work">Work</a></li>
-      <li><a href="index.html#contact">Contact</a></li>
-    </ol>
-  </nav>
 
   <!-- Content is rendered from js/content.js by js/story.js -->
   <main id="story" data-story></main>

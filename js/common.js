@@ -36,6 +36,59 @@
     onScroll();
   }
 
+  // Inline nav: mark the section you are actually in. The link list is the
+  // source of truth, so a new section in the header joins the spy for free.
+  const inlineNav = document.querySelector("[data-nav-inline]");
+  if (inlineNav) {
+    const spy = [...inlineNav.querySelectorAll('a[href^="#"]')]
+      .map((a) => ({ a, el: document.getElementById(a.getAttribute("href").slice(1)) }))
+      .filter((t) => t.el);
+    const introEl = document.querySelector("[data-intro]");
+
+    // Whichever section fills the most screen is the one being read. Judging
+    // by how much is on screen rather than by where a section's top sits
+    // means the pill moves when the view does, and it needs no special case
+    // at either end: the last section wins once it dominates, even though the
+    // page runs out of scroll before it could ever reach the top.
+    //
+    // About is the exception. It is pinned inside the sticky intro, so its
+    // own box never moves and the intro's box stands in for it. It stays out
+    // of the running until the layer has crossfaded in, so the hero is not
+    // labelled About.
+    const rangeOf = (t) => {
+      if (introEl && introEl !== t.el && introEl.contains(t.el)) {
+        const r = introEl.getBoundingClientRect();
+        const travel = Math.max(1, introEl.offsetHeight - window.innerHeight);
+        return -r.top / travel >= 0.5 ? r : null;
+      }
+      return t.el.getBoundingClientRect();
+    };
+
+    let spyQueued = false;
+    const markActive = () => {
+      spyQueued = false;
+      const vh = window.innerHeight;
+      let current = null, most = 0;
+      spy.forEach((t) => {
+        const r = rangeOf(t);
+        if (!r) return;
+        const visible = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+        // ties go to the later section, so the nav keeps moving forward
+        if (visible > 0 && visible >= most) { most = visible; current = t; }
+      });
+      spy.forEach((t) => {
+        if (t === current) t.a.setAttribute("aria-current", "true");
+        else t.a.removeAttribute("aria-current");
+      });
+    };
+    const queueSpy = () => {
+      if (!spyQueued) { spyQueued = true; requestAnimationFrame(markActive); }
+    };
+    window.addEventListener("scroll", queueSpy, { passive: true });
+    window.addEventListener("resize", queueSpy);
+    markActive();
+  }
+
   // Contact links + year
   document.querySelectorAll("[data-email]").forEach((a) => (a.href = "mailto:" + S.email));
   document.querySelectorAll("[data-linkedin]").forEach((a) => (a.href = S.linkedin));
