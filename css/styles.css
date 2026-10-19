@@ -1628,6 +1628,11 @@ body.menu-open {
 
 /* =====================================================================
    SHAPE RULE (section divider built from the brand shape language)
+
+   Currently unused. It ran between the resume snapshot and kind words until
+   the resume band's own background proved to be separation enough, so as a
+   divider it read as decoration. Kept because the shape row itself is worth
+   reusing somewhere it earns its place — don't delete it as dead CSS.
    ===================================================================== */
 .shape-rule {
   display: flex;
@@ -1687,7 +1692,10 @@ body.menu-open {
    KIND WORDS
    ===================================================================== */
 .kind-words {
-  padding-top: clamp(40px, 5vw, 64px);
+  /* Full section padding. While the shape rule sat above this section it
+     carried the space itself, and this was trimmed to clamp(40px, 5vw, 64px);
+     put that back if the rule ever returns here. */
+  padding-top: clamp(80px, 11vw, 160px);
 }
 
 .quotes {
@@ -1775,6 +1783,21 @@ body.menu-open {
   gap: 16px;
   margin-top: 44px;
   flex-wrap: wrap;
+}
+
+/* Bars and arrows travel together on the left, the LinkedIn link holds the
+   right — the same split the work carousel's controls use. Either control
+   drives the same showQuote(), so they stay in step. */
+.quotes__nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.quotes__arrows {
+  display: flex;
+  gap: 10px;
 }
 
 /* The bar is the <i>. The button around it is padded out to a 44px-tall
@@ -2049,12 +2072,6 @@ body.menu-open {
   color: var(--ink-soft);
 }
 
-.footer__base i {
-  font-style: normal;
-  color: var(--coral);
-  margin-inline: .4em;
-}
-
 .footer__marks {
   display: flex;
   align-items: center;
@@ -2076,6 +2093,12 @@ body.menu-open {
 
 .footer__marks svg:nth-child(3) {
   fill: var(--coral);
+  width: 10px;
+  height: 10px;
+}
+
+.footer__marks svg:nth-child(4) {
+  fill: var(--charcoal);
   width: 10px;
   height: 10px;
 }

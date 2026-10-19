@@ -33,8 +33,8 @@
   <nav class="menu" id="menu" aria-label="Main" data-menu hidden>
     <ol class="menu__list">
       <li><a href="#about">About</a></li>
-      <li><a href="#resume">Resume snapshot</a></li>
       <li><a href="#work">Work</a></li>
+      <li><a href="#resume">Resume snapshot</a></li>
       <li><a href="#kind-words">Kind words</a></li>
       <li><a href="#contact">Contact</a></li>
     </ol>
@@ -47,7 +47,6 @@
         <canvas class="field" data-field aria-hidden="true"></canvas>
 
         <div class="hero-layer" data-hero>
-          <p class="eyebrow">UX/UI <span>×</span> People <span>×</span> Systems <span>×</span> Impact</p>
           <h1 class="hero-title">Serious impact.<br /><em>Playful spirit.</em></h1>
           <p class="hero-sub">Clarity, craft, and a<br />lot of curiosity.</p>
 
@@ -86,38 +85,6 @@
         </div>
 
         <div class="scroll-cue" data-cue aria-hidden="true"><span></span>Scroll</div>
-      </div>
-    </section>
-
-    <!-- ============ RESUME ============ -->
-    <section class="section resume" id="resume">
-      <div class="container">
-        <div class="section-head">
-          <h2 class="section-label">Resume snapshot</h2>
-        </div>
-
-        <div class="timeline" data-timeline>
-          <svg class="timeline__line" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true">
-            <defs>
-              <clipPath id="tl-clip">
-                <rect data-tl-clip x="0" y="0" width="0" height="120" />
-              </clipPath>
-            </defs>
-            <path class="timeline__base" data-tl-path
-              d="M0,70 C120,20 220,110 340,64 S560,18 680,62 S880,100 1000,40" />
-            <path class="timeline__progress" clip-path="url(#tl-clip)"
-              d="M0,70 C120,20 220,110 340,64 S560,18 680,62 S880,100 1000,40" />
-          </svg>
-          <div class="timeline__points" role="tablist" aria-label="Career timeline" data-tl-points></div>
-        </div>
-
-        <div class="timeline__detail" role="tabpanel" data-tl-panel aria-live="polite"></div>
-
-        <div class="timeline__nav">
-          <button class="round-btn" data-tl-prev aria-label="Previous role">←</button>
-          <span class="timeline__count" data-tl-count></span>
-          <button class="round-btn" data-tl-next aria-label="Next role">→</button>
-        </div>
       </div>
     </section>
 
@@ -183,22 +150,37 @@
       </div>
     </section>
 
-    <div class="container">
-      <div class="shape-rule reveal" aria-hidden="true">
-        <svg viewBox="0 0 100 100">
-          <polygon points="50,3 91,26.5 91,73.5 50,97 9,73.5 9,26.5" />
-        </svg>
-        <svg viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="47" />
-        </svg>
-        <svg viewBox="0 0 100 100">
-          <polygon points="50,6 96,92 4,92" />
-        </svg>
-        <svg viewBox="0 0 100 100">
-          <rect x="4" y="4" width="92" height="92" rx="8" />
-        </svg>
+    <!-- ============ RESUME ============ -->
+    <section class="section resume" id="resume">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-label">Resume snapshot</h2>
+        </div>
+
+        <div class="timeline" data-timeline>
+          <svg class="timeline__line" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <clipPath id="tl-clip">
+                <rect data-tl-clip x="0" y="0" width="0" height="120" />
+              </clipPath>
+            </defs>
+            <path class="timeline__base" data-tl-path
+              d="M0,70 C120,20 220,110 340,64 S560,18 680,62 S880,100 1000,40" />
+            <path class="timeline__progress" clip-path="url(#tl-clip)"
+              d="M0,70 C120,20 220,110 340,64 S560,18 680,62 S880,100 1000,40" />
+          </svg>
+          <div class="timeline__points" role="tablist" aria-label="Career timeline" data-tl-points></div>
+        </div>
+
+        <div class="timeline__detail" role="tabpanel" data-tl-panel aria-live="polite"></div>
+
+        <div class="timeline__nav">
+          <button class="round-btn" data-tl-prev aria-label="Previous role">←</button>
+          <span class="timeline__count" data-tl-count></span>
+          <button class="round-btn" data-tl-next aria-label="Next role">→</button>
+        </div>
       </div>
-    </div>
+    </section>
 
     <!-- ============ LINKEDIN RECOMMENDATIONS ============ -->
     <section class="section kind-words" id="kind-words">
@@ -206,7 +188,13 @@
         <h2 class="section-label">Kind words</h2>
         <div class="quotes" data-quotes aria-live="polite"></div>
         <div class="quotes__footer">
-          <div class="quotes__dots" data-quote-dots></div>
+          <div class="quotes__nav">
+            <div class="quotes__dots" data-quote-dots></div>
+            <div class="quotes__arrows" data-quote-arrows>
+              <button class="round-btn" data-quote-prev aria-label="Previous recommendation">←</button>
+              <button class="round-btn" data-quote-next aria-label="Next recommendation">→</button>
+            </div>
+          </div>
           <a class="btn btn--ghost" data-linkedin href="#" target="_blank" rel="noopener">See more on LinkedIn <span
               aria-hidden="true">↗</span></a>
         </div>
@@ -256,8 +244,10 @@
         <svg viewBox="0 0 100 100">
           <polygon points="50,6 96,92 4,92" />
         </svg>
+        <svg viewBox="0 0 100 100">
+          <rect x="4" y="4" width="92" height="92" rx="8" />
+        </svg>
       </span>
-      <span>UX/UI <i>×</i> Leadership <i>×</i> What's next</span>
     </div>
   </footer>
 

@@ -399,6 +399,19 @@
   const qBtns = [...qDots.children];
   qBtns.forEach((b, i) => b.addEventListener("click", () => showQuote(i)));
 
+  // Arrows are the second way through the same list; showQuote wraps at both
+  // ends, so there is nothing to disable. With one recommendation there is
+  // nowhere to go, so the pair comes out of the layout entirely.
+  const qArrows = document.querySelector("[data-quote-arrows]");
+  if (qArrows) {
+    if (recs.length < 2) {
+      qArrows.hidden = true;
+    } else {
+      qArrows.querySelector("[data-quote-prev]").addEventListener("click", () => showQuote(qi - 1));
+      qArrows.querySelector("[data-quote-next]").addEventListener("click", () => showQuote(qi + 1));
+    }
+  }
+
   function showQuote(i) {
     qi = (i + recs.length) % recs.length;
     quoteEls.forEach((q, j) => { q.classList.toggle("is-active", j === qi); q.setAttribute("aria-hidden", String(j !== qi)); });
