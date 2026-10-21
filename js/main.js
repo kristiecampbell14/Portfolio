@@ -55,6 +55,10 @@
     const dpr = window.devicePixelRatio || 1;
     const photoY = Math.round((1 - photoT) * photoTravel * dpr) / dpr;
     stage.style.setProperty("--photo-y", photoY + "px");
+    // On narrow screens the about copy sits over the portrait, so the photo
+    // clears out as the copy arrives instead of leaving the face under text.
+    const photoO = narrow.matches ? 1 - easeInOut(clamp((p - 0.15) / 0.35)) : 1;
+    stage.style.setProperty("--photo-o", photoO.toFixed(3));
     stage.style.setProperty("--about-o", aboutShown.toFixed(3));
     stage.style.setProperty("--about-y", (reduced ? 0 : (1 - aboutShown) * 40).toFixed(1) + "px");
     stage.style.setProperty("--line-o", easeOut(clamp((p - 0.72) / 0.28)).toFixed(3));

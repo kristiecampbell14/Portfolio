@@ -709,6 +709,7 @@ body.menu-open {
   height: min(92svh, 58vw);
   aspect-ratio: 1;
   transform: translate3d(0, var(--photo-y, 54%), 0);
+  opacity: var(--photo-o, 1);
   will-change: transform;
 }
 
