@@ -199,6 +199,9 @@
 
   let w = 0, h = 0, dpr = 1, gap = 26, dots = [];
   const blob = { x: 0, y: 0, tx: 0, ty: 0 };
+  const stacked = window.matchMedia("(max-width: 899px)");
+  const about = document.querySelector("[data-about]");
+  const sub = document.querySelector("[data-hero] .hero-sub");
   let lastPointer = -Infinity, running = false, visible = true, raf = 0;
   let scrolling = false, scrollTimer = 0, animTime = 0, lastFrame = 0;
   const IDLE_MS = 2500;
@@ -218,14 +221,17 @@
     const ox = ((w % gap) + gap) / 2, oy = ((h % gap) + gap) / 2;
     for (let y = oy; y < h; y += gap) for (let x = ox; x < w; x += gap) dots.push(x, y);
     if (gl) glData = new Float32Array((dots.length / 2) * STRIDE);
-    if (!blob.x) { blob.x = blob.tx = w * 0.62; blob.y = blob.ty = h * 0.45; }
+    if (!blob.x) {
+      [blob.tx, blob.ty] = restPoint();
+      blob.x = blob.tx; blob.y = blob.ty;
+    } else if (rest()) start();
     shieldKey = null;
     if (reduced) { syncShields(); draw(0); }
   }
 
   function draw(t) {
     if (glLost) return;
-    const R = Math.max(140, Math.min(w, h) * 0.3);
+    const R = blobR();
     let slots = null, n = 0;
     if (!gl) {
       ctx.clearRect(0, 0, w, h);
@@ -301,13 +307,14 @@
     animTime += dt;
 
     const idle = t - lastPointer > IDLE_MS;
-    if (!idle) {
+    const gliding = Math.abs(blob.tx - blob.x) + Math.abs(blob.ty - blob.y) > 0.5;
+    if (!idle || gliding) {
       blob.x += (blob.tx - blob.x) * 0.07;
       blob.y += (blob.ty - blob.y) * 0.07;
     }
     syncShields();
     draw(animTime);
-    if (idle || scrolling) {
+    if ((idle && !gliding) || scrolling) {
       running = false;
       return;
     }
@@ -321,6 +328,38 @@
     raf = requestAnimationFrame(frame);
   }
   function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; }
+
+  function blobR() { return Math.max(140, Math.min(w, h) * 0.3); }
+
+  // Where the blob sits when no pointer is steering it. The stacked layout
+  // runs the copy across the middle of the screen, so there the blob rests
+  // in the open space below whichever copy is up: under the hero subhead at
+  // the top, and under the About column once that is in.
+  function restPoint() {
+    const x = w * 0.62, y = h * 0.45;
+    if (!stacked.matches) return [x, y];
+    const top = canvas.getBoundingClientRect().top;
+    if (about && stageVar("--about-o", 0) > 0.5) {
+      const below = about.getBoundingClientRect().bottom - top;
+      return [x, Math.max(y, below + (h - below) / 2)];
+    }
+    if (!sub) return [x, y];
+    // where the subhead sits at rest, not wherever the scroll has lifted it to
+    const below = sub.getBoundingClientRect().bottom - top - stageVar("--hero-y", 0);
+    return [x, Math.max(y, below + blobR() * 0.7)];
+  }
+
+  // The stacked layout's rest point moves with the copy, so it is re-taken
+  // once a scroll settles. Elsewhere the blob stays where the cursor left it.
+  function rest() {
+    if (!stacked.matches) return false;
+    const [tx, ty] = restPoint();
+    if (tx === blob.tx && ty === blob.ty) return false;
+    blob.tx = tx;
+    blob.ty = ty;
+    if (reduced) { blob.x = tx; blob.y = ty; syncShields(); draw(0); }
+    return true;
+  }
 
   window.addEventListener("pointermove", (e) => {
     if (e.pointerType === "touch") return;
@@ -341,13 +380,14 @@
     clearTimeout(scrollTimer);
     scrollTimer = setTimeout(() => {
       scrolling = false;
-      if (performance.now() - lastPointer < IDLE_MS) start();
+      if (performance.now() - lastPointer < IDLE_MS || rest()) start();
     }, 280);
   }, { passive: true });
 
   // web fonts change the copy's line boxes, so the shields are measured again once they land
   document.fonts?.addEventListener("loadingdone", () => {
     shieldKey = null;
+    if (rest()) start();
     if (reduced) { syncShields(); draw(0); }
   });
   new ResizeObserver(resize).observe(canvas);
